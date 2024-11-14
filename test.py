@@ -1,4 +1,7 @@
 from datetime import datetime, timedelta
+from PIL import Image
+import os
+
 def ccsds_to_datetime(ccsds_epoch):
     """
     Convert a CCSDS epoch (seconds since 1958-01-01T00:00:00 TAI) to a Python datetime object.
@@ -6,7 +9,15 @@ def ccsds_to_datetime(ccsds_epoch):
     ccsds_epoch_start = datetime(1958, 1, 1)
     return ccsds_epoch_start + timedelta(seconds=ccsds_epoch)
 
-def readHeaders(in_file):
+def readImageData(imageBytes,width,height,bitDepth,imgName):
+    if bitDepth == 8:
+        img = Image.frombytes('L',(width,height), imageBytes)
+        #img.show()
+        img.save("../GOES Files Decoded/" + imgName[:-5] + ".jpg")
+    else:
+        print("TODO FIX BIT DEPTH != 8")
+
+def readLRIT(in_file):
     #Reads Primary Header
     print("\nPrimary Header Record:")
     data = in_file.read(1) #header type, should be 0
@@ -14,7 +25,8 @@ def readHeaders(in_file):
     data = in_file.read(2) #This headers size, should be 16
     print("Header Size: %d Bytes" % int.from_bytes(data))
     data = in_file.read(1) #file type code, determines top level structure of file data field
-    print("File Type Code: %d" % int.from_bytes(data))
+    fileType = int.from_bytes(data)
+    print("File Type Code: %d" % fileType)
     dataType = int.from_bytes(data)
     if dataType == 0:
         print("File Type: Image Data File")
@@ -32,8 +44,8 @@ def readHeaders(in_file):
     headerSize = int.from_bytes(data) #variable to keep track of total header size
     print("Total Header Size: %d Bytes" % int.from_bytes(data))
     data = in_file.read(8) #Total size of data field
-    dataSize = int.from_bytes(data) #variable to keep track of total data size
-    print("Total Data Field Size: %d Bytes" % int.from_bytes(data))
+    dataSize = int(int.from_bytes(data) / 8) #variable to keep track of total data size, given in bits converted to bytes
+    print("Total Data Field Size: %d Bytes" % dataSize)
 
     #Reads Remaining Optional Headers
     headerPointer = 16
@@ -51,11 +63,14 @@ def readHeaders(in_file):
             tempHeadSize = int.from_bytes(data)
             print("Header Size: %d Bytes" % tempHeadSize)
             data = in_file.read(1) #num bits per pixel 1-255
-            print("Number of Bits Per Pixel: %d" % int.from_bytes(data))
+            numBits = int.from_bytes(data)
+            print("Number of Bits Per Pixel: %d" % numBits)
             data = in_file.read(2) #num columns 1 - 65535
-            print("Number of Columns: %d" % int.from_bytes(data))
+            numCols = int.from_bytes(data)
+            print("Number of Columns: %d" % numCols)
             data = in_file.read(2) #num lines 1 - 65535
-            print("Number of Lines: %d" % int.from_bytes(data))
+            numRows = int.from_bytes(data)
+            print("Number of Lines: %d" % numRows)
             data = in_file.read(1) #compression flag (0,1,2)
             print("Compression Flag: %d" % int.from_bytes(data))
         elif headType == 2:
@@ -86,7 +101,8 @@ def readHeaders(in_file):
             tempHeadSize = int.from_bytes(data)
             print("Header Size: %d Bytes" % tempHeadSize)
             data = in_file.read(tempHeadSize - 3) #annotation text
-            print("Annotation Text: %s" % data.decode("ASCII"))
+            imgName = data.decode("ASCII")
+            print("Annotation Text: %s" % imgName)
         elif headType == 5:
             print("Header Type: Time Stamp")
             data = in_file.read(2) #This headers size
@@ -141,13 +157,22 @@ def readHeaders(in_file):
             data = in_file.read(tempHeadSize - 3) #Reads remaining header info
         headerPointer += tempHeadSize
         headerCounter += 1
-    return
+    
+    #Reading data field depending on file type
+    if fileType == 0:
+        data = in_file.read(dataSize) #reads entire data field
+        readImageData(data,numCols,numRows,numBits,imgName)
+    
 
 #Temp code to clear console during development
-import os
 clear = lambda: os.system('cls')
 clear()
 
-in_file = open("../GOES Files HRIT/VC2_20180223175001_39326_OR_ABI-L2-CMIPF-M3C02_G16_s20180541730394_e20180541741161_c20180541741231.lrit","rb")
-readHeaders(in_file)
-in_file.close()
+path = "../GOES Files HRIT/" #path to folder of HRIT files
+os.chdir(path) #change directory to folder
+for file in os.listdir(): #iterate through all files in folder
+    if file.endswith(".lrit"):
+        file_path = f"{path}\{file}"
+        in_file = open(file_path,"rb")
+        readLRIT(in_file)
+        in_file.close()
