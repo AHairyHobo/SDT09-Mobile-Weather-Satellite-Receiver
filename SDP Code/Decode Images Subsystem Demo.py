@@ -3,14 +3,13 @@ from PIL import Image
 import os
 
 def ccsds_to_datetime(ccsds_epoch):
-    """
-    Convert a CCSDS epoch (seconds since 1958-01-01T00:00:00 TAI) to a Python datetime object.
-    """
+    #Convert a CCSDS epoch (seconds since 1958-01-01T00:00:00 TAI) to a Python datetime object.
     ccsds_epoch_start = datetime(1958, 1, 1)
     return ccsds_epoch_start + timedelta(seconds=ccsds_epoch)
 
 def readImageData(imageBytes,width,height,bitDepth,imgName):
     if bitDepth == 8:
+        #Use Pillow Image library to construct image from the byte array
         img = Image.frombytes('L',(width,height), imageBytes)
         #img.show()
         img.save("../GOES Files Decoded/" + imgName[:-5] + ".jpg")
@@ -57,6 +56,8 @@ def readLRIT(in_file):
         print("Header Type Code: %d" % int.from_bytes(data))
         if headType == 0:
             print("Header Type: Primary Header") #If you end up here something is wrong...
+        
+        #Conditional for Image Structure header
         elif headType == 1:
             print("Header Type: Image Structure")
             data = in_file.read(2) #This headers size
@@ -73,6 +74,8 @@ def readLRIT(in_file):
             print("Number of Lines: %d" % numRows)
             data = in_file.read(1) #compression flag (0,1,2)
             print("Compression Flag: %d" % int.from_bytes(data))
+        
+        #Conditional for Image Navigation header
         elif headType == 2:
             print("Header Type: Image Navigation")
             data = in_file.read(2) #This headers size
@@ -88,6 +91,8 @@ def readLRIT(in_file):
             print("Column Offset: %d" % int.from_bytes(data))
             data = in_file.read(4) #line offset
             print("Line Offset: %d" % int.from_bytes(data))
+        
+        #Conditional for Image Data Function header
         elif headType == 3:
             print("Header Type: Image Data Function")
             data = in_file.read(2) #This headers size
@@ -95,6 +100,8 @@ def readLRIT(in_file):
             print("Header Size: %d Bytes" % tempHeadSize)
             data = in_file.read(tempHeadSize - 3) #data definition block
             print("Data Definition Block: %s" % data.decode("ASCII"))
+        
+        #Conditional for Annotation header
         elif headType == 4:
             print("Header Type: Annotation")
             data = in_file.read(2) #This headers size
@@ -103,6 +110,8 @@ def readLRIT(in_file):
             data = in_file.read(tempHeadSize - 3) #annotation text
             imgName = data.decode("ASCII")
             print("Annotation Text: %s" % imgName)
+        
+        #Conditional for Time Stamp header
         elif headType == 5:
             print("Header Type: Time Stamp")
             data = in_file.read(2) #This headers size
@@ -129,6 +138,8 @@ def readLRIT(in_file):
             ccsds_epoch = (ccsdsDays * 86400) + (ccsdsMilliseconds / 1000) #This code to convert ccsds time to a date is slightly off from date given in file name, maybe fix later
             datetime_obj = ccsds_to_datetime(ccsds_epoch)
             print("  %s" % datetime_obj)
+        
+        #Conditional for Ancillary text header
         elif headType == 6:
             print("Header Type: Ancillary text")
             data = in_file.read(2) #This headers size
@@ -136,6 +147,8 @@ def readLRIT(in_file):
             print("Header Size: %d Bytes" % tempHeadSize)
             data = in_file.read(tempHeadSize - 3) #ancillary text
             print("Ancillary Text: %s" % data.decode("ASCII"))
+        
+        #Conditional for Key Header
         elif headType == 7:
             print("Header Type: Key Header")
             data = in_file.read(2) #This headers size
@@ -143,18 +156,23 @@ def readLRIT(in_file):
             print("Header Size: %d Bytes" % tempHeadSize)
             data = in_file.read(tempHeadSize - 3) #key header info
             print("Key Header Information (mission specific): %s" % data.decode("ASCII"))
+        
+        #Conditional for Reserved for future global use header
         elif headType >= 8 and headType <= 127:
             print("Header Type: Reserved for future global use")
             data = in_file.read(2) #This headers size
             tempHeadSize = int.from_bytes(data)
             print("Header Size: %d Bytes" % tempHeadSize)
             data = in_file.read(tempHeadSize - 3) #Reads remaining header info
+        
+        #Conditional for mission specific use header
         else:
             print("Header Type: For mission specific use")
             data = in_file.read(2) #This headers size
             tempHeadSize = int.from_bytes(data)
             print("Header Size: %d Bytes" % tempHeadSize)
             data = in_file.read(tempHeadSize - 3) #Reads remaining header info
+        
         headerPointer += tempHeadSize
         headerCounter += 1
     
