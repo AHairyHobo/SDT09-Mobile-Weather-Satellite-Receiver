@@ -1,15 +1,79 @@
-<h1>Page Title</h1>
+<!DOCTYPE html>
+<html>
 
-<p>Lorem ipsum <strong>dolor</strong> sit <em>amet</em></p>
+<head>
+  <title>My Website</title>
+  <style type="text/css">
+    #header {
+      color: #f757ff;
+      background-color: #9a326e;
+      border-top: 10px inset #00ff00;
+      margin-bottom: 20px;
+      padding-left: 20px;
+      font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", "sans serif";
+    }
 
-<ol>
-  <li>Item number one</li>
-  <li>Item number two</li>
-  <li>Item number three</li>
-</ol>
+    #content {
+      width: 100%;
+      background-color: #bdffde;
+      color: #ff0000;
+      /*red*/
+      font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+      font-size: 10pt;
+    }
 
-<a href="about_me.html">About me</a>
+    #footer {
+      width: 7%;
+      background-color: #ffffff;
+      color: #0cff00;
+      font-family: sans-serif;
+    }
 
-<br>
+    #main {
+      display: flex;
+    }
 
-<img width="958" height="510" src="sdrsharp goes attempt 2.png">
+    strong {
+      color: #eeeeee;
+      background-color: #22661a;
+    }
+
+    body {
+      background-color: #ffffbd;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="header">
+    <h1>A very important website full of <em>necessary</em> information</h1>
+  </div>
+  <div id="main">
+    <div id="sidebar">
+      <p>Some links could go here mayhaps</p>
+    </div>
+    <div id="content">
+      <p>I'm learning HTML and CSS!</p>
+      <p>Lorem ipsum <strong>dolor</strong> sit <em>amet</em></p>
+      <ol>
+        <li>Item number one</li>
+        <li>Item number two</li>
+        <li>Item number three</li>
+      </ol>
+      <p>Thanks for visiting today!</p>
+      <p><a href="about_me.html">About me</a></p>
+      <p><a href="test_page.html">This page has a title!</a></p>
+      <p><a href="css_test1.html">Testing CSS</a></p>
+      <div style="width:360px;max-width:100%;">
+        <div style="height:0;padding-bottom:75%;position:relative;"><iframe width="360" height="270"
+            style="position:absolute;top:0;left:0;width:100%;height:100%;" frameBorder="0"
+            src="https://imgflip.com/embed/1s72kj"></iframe></div>
+      </div>
+    </div>
+  </div>
+  <div id="footer">
+    <p>Website made with love and coffee. This is really tall and thin for no reason</p>
+  </div>
+</body>
+
+</html>
