@@ -183,8 +183,8 @@ def readLRIT(in_file):
     
 
 #Temp code to clear console during development
-clear = lambda: os.system('cls')
-clear()
+#clear = lambda: os.system('cls')
+#clear()
 
 path = "../GOES Files HRIT/" #path to folder of HRIT files
 os.chdir(path) #change directory to folder
