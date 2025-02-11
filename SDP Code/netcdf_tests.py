@@ -27,9 +27,13 @@ ref = (radiance * np.pi * d2) / Esun_Ch_02
 # Make sure all data is in the valid data range
 ref = np.maximum(ref, 0.0)
 ref = np.minimum(ref, 1.0)
-# Plot reflectance
+
+# Apply the formula to adjust reflectance gamma
+ref_gamma = np.sqrt(ref)
+
+# Plot gamma adjusted reflectance
 fig = plt.figure(figsize=(6,6),dpi=200)
-im = plt.imshow(ref, vmin=0.0, vmax=1.0, cmap='Greys_r')
+im = plt.imshow(ref_gamma, vmin=0.0, vmax=1.0, cmap='Greys_r')
 cb = fig.colorbar(im, orientation='horizontal')
 cb.set_ticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
 cb.set_label('Reflectance')
