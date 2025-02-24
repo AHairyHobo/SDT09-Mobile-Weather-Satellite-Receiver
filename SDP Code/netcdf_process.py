@@ -11,13 +11,20 @@ def rebin(a, shape):
     sh = shape[0],a.shape[0]//shape[0],shape[1],a.shape[1]//shape[1]
     return a.reshape(sh).mean(-1).mean(1)
 
+def scaleVals(min, max, arr):
+    # Avoid division by zero if min and max values are the same
+    if max == min:
+      return np.zeros_like(arr, dtype=np.uint8)
+
+    scaled_arr = (arr - min) / (max - min) * 255
+    return scaled_arr.astype(np.uint8)
+
 #Load in netCDF File, read radiance values, convert to reflectance, save as image
 def loadFile(filename):
     #Open netCDF file and load relevant values to variables
     g16nc = Dataset(filename, 'r')
     radiance = g16nc.variables['Rad'][:] #Load 2d array of radiance values
     radiance = rebin(radiance, finalImageShape) #reshape to smaller data array
-    print(g16nc.variables.keys())
     ir_band = g16nc.variables['band_id'][:][0] #load id of this ir band
 
     #If its IR band 1-6, convert radiance to reflectance
@@ -32,21 +39,21 @@ def loadFile(filename):
         reflectance = np.maximum(reflectance, 0.0)
         reflectance = np.minimum(reflectance, 1.0)
 
-        # Apply the formula to adjust reflectance gamma
-        ref_gamma = np.sqrt(reflectance)
+        # Apply the formula to adjust reflectance gamma and scale it
+        reflectance = np.sqrt(reflectance)
+        greyscale_img = (reflectance*255).astype(np.uint8) #scale float to 8 bit int
 
     #If its IR band 7-16, convert radiance to temperature kelvin
     else:
-        #load planck function constants
-        fk1 = g16nc.variables['planck_fk1'][:]
-        fk2 = g16nc.variables['planck_fk2'][:]
-        bc1 = g16nc.variables['planck_bc1'][:]
-        bc2 = g16nc.variables['planck_bc2'][:]
+        #load min/max values
+        min = g16nc.variables['min_radiance_value_of_valid_pixels'][:]
+        max = g16nc.variables['max_radiance_value_of_valid_pixels'][:]
+
+        greyscale_img = scaleVals(min, max, radiance)
 
     #save image
-    greyscale_img = (ref_gamma*255).astype(np.uint8) #scale float to 8 bit int
     img = Image.fromarray(greyscale_img, mode="L")
-    img.show()
+    #img.show()
     img.save("../Sample Images/" + filename[:-3] + ".jpg")
     
 
@@ -55,12 +62,13 @@ def loadFile(filename):
     g16nc = None
 
 
-
-path = "../netCDF Unprocessed/" #path to folder of unprocessed netcdf files
-os.chdir(path) #change directory to folder
 #Temp code to clear console during development
 clear = lambda: os.system('cls')
 clear()
-
-filename = "OR_ABI-L1b-RadF-M6C07_G16_s20250412230206_e20250412239525_c20250412239571.nc"
-loadFile(filename)
+path = "../netCDF Unprocessed/" #path to folder of unprocessed netcdf files
+os.chdir(path) #change directory to folder
+for file in os.listdir(): #iterate through all files in folder
+    if file.endswith(".nc"):
+        filename = f"{file}"
+        print(filename)
+        loadFile(filename)
