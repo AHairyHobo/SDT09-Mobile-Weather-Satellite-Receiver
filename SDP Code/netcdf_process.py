@@ -5,12 +5,14 @@ import os
 
 #reshape the array of data by finding the average of the values
 def rebin(a):
-    if (a.shape[0] % 10848 == 0) and (a.shape[1] % 10848 == 0):
+    if (a.shape[0] % 1356 == 0) and (a.shape[1] % 1356 == 0):
         shape = (1356, 1356)
     elif (a.shape[0] % 750 == 0) and (a.shape[1] % 1250 == 0):
         shape = (750, 1250)
     elif (a.shape[0] % 1000 == 0) and (a.shape[1] % 1000 == 0):
         shape = (1000, 1000)
+    elif (a.shape[0] % 500 == 0) and (a.shape[1] % 500 == 0):
+        shape = (500, 500)
     elif (a.shape[0] % 500 == 0) and (a.shape[1] % 500 == 0):
         shape = (500, 500)
     else:
@@ -64,7 +66,7 @@ def loadFile(filename, dest):
     #save image
     img = Image.fromarray(greyscale_img, mode="L")
     #img.show()
-    img.save(dest + filename[:-3] + ".jpg")
+    img.save(dest)
     
 
     #close file
@@ -77,34 +79,34 @@ clear = lambda: os.system('cls')
 clear()
 
 path = "../netCDF Unprocessed/Full Disk" #path to folder of unprocessed netcdf files
-dest = "../../Sample Images/Full Disk/" #Path to destination for saved image
+dest = "../../Sample Images/Full Disk" #Path to destination for saved image
 os.chdir(path) #change directory to folder
 for file in os.listdir(): #iterate through all files in folder
     if file.endswith(".nc"):
         filename = f"{file}"
-        #print(filename)
-        loadFile(filename, dest)
+        dest_path = os.path.join(dest, filename[19:21], filename[:-3] + ".jpg")
+        loadFile(filename, dest_path)
         new_path = os.path.join("../../netCDF Processed/Full Disk", filename)
         os.replace(filename, new_path)
 
 path = "../Conus" #path to folder of unprocessed netcdf files
-dest = "../../Sample Images/Conus/" #Path to destination for saved image
+dest = "../../Sample Images/Conus" #Path to destination for saved image
 os.chdir(path) #change directory to folder
 for file in os.listdir(): #iterate through all files in folder
     if file.endswith(".nc"):
         filename = f"{file}"
-        #print(filename)
-        loadFile(filename, dest)
+        dest_path = os.path.join(dest, filename[19:21], filename[:-3] + ".jpg")
+        loadFile(filename, dest_path)
         new_path = os.path.join("../../netCDF Processed/Conus", filename)
         os.replace(filename, new_path)
 
 path = "../Meso" #path to folder of unprocessed netcdf files
-dest = "../../Sample Images/Meso/" #Path to destination for saved image
+dest = "../../Sample Images/Meso" #Path to destination for saved image
 os.chdir(path) #change directory to folder
 for file in os.listdir(): #iterate through all files in folder
     if file.endswith(".nc"):
         filename = f"{file}"
-        #print(filename)
-        loadFile(filename, dest)
+        dest_path = os.path.join(dest, filename[14:16], filename[20:22], filename[:-3] + ".jpg")
+        loadFile(filename, dest_path)
         new_path = os.path.join("../../netCDF Processed/Meso", filename)
         os.replace(filename, new_path)

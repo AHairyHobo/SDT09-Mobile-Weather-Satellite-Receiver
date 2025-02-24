@@ -6,7 +6,7 @@ conus_path = "C:/Users/Sam/Documents/Senior Design Project/netCDF Unprocessed/Co
 meso_path = "C:/Users/Sam/Documents/Senior Design Project/netCDF Unprocessed/Meso"
 
 G = GOES(satellite=16, product="ABI-L1b-RadF")
-G.timerange(recent='240min')
+G.timerange(recent='30min')
 
 root = "C:/Users/Sam/data/noaa-goes16/ABI-L1b-RadF"
 for dirpath, dirnames, filenames in os.walk(root):
@@ -16,7 +16,7 @@ for dirpath, dirnames, filenames in os.walk(root):
             os.replace(old_path, new_path)
             
 G = GOES(satellite=16, product="ABI-L1b-RadC")
-G.timerange(recent='240min')
+G.timerange(recent='30min')
 
 root = "C:/Users/Sam/data/noaa-goes16/ABI-L1b-RadC"
 for dirpath, dirnames, filenames in os.walk(root):
@@ -26,7 +26,7 @@ for dirpath, dirnames, filenames in os.walk(root):
             os.replace(old_path, new_path)
 
 G = GOES(satellite=16, product="ABI-L1b-RadM")
-G.timerange(recent='240min')
+G.timerange(recent='30min')
 
 root = "C:/Users/Sam/data/noaa-goes16/ABI-L1b-RadM"
 for dirpath, dirnames, filenames in os.walk(root):

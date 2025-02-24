@@ -1,5 +1,6 @@
 import datetime
 import os
+import shutil
 
 def julian2std(jdate):
     fmt = '%Y%j%H%M%S%f'
@@ -15,40 +16,23 @@ julian_create = filename[59:73] + "00000"
 std_start = julian2std(julian_start)
 print(std_start)
 '''
-
-#Move all files into correct subfolders
-path = "../Sample Images/Full Disk" #path to folder of images
-os.chdir(path) #change directory to folder
-for file in os.listdir(): #iterate through all files in folder
-    if file.endswith(".jpg"):
-        filename = f"{file}"
-        #print(filename)
-        new_path = os.path.join(filename[19:21], filename)
-        os.replace(filename, new_path)
-
-path = "../Conus" #path to folder of images
-os.chdir(path) #change directory to folder
-for file in os.listdir(): #iterate through all files in folder
-    if file.endswith(".jpg"):
-        filename = f"{file}"
-        #print(filename)
-        new_path = os.path.join(filename[19:21], filename)
-        os.replace(filename, new_path)
-
-path = "../Meso" #path to folder of images
-os.chdir(path) #change directory to folder
-for file in os.listdir(): #iterate through all files in folder
-    if file.endswith(".jpg"):
-        filename = f"{file}"
-        #print(filename)
-        new_path = os.path.join(filename[14:16], filename[20:22], filename)
-        os.replace(filename, new_path)
-
+#Temp code to clear console during development
+clear = lambda: os.system('cls')
+clear()
 
 #Find latest
-path = ".."
+path = "../Sample Images"
 for dirpath, dirname, filenames in os.walk(path):
     if not dirname:
-        
+        latest_time = 0
         for file in os.listdir(dirpath):
-            
+            if file != "latest.jpg":
+                if dirpath[17:21] == "Meso":
+                    start_time = file[28:42]
+                else:
+                    start_time = file[27:41]
+                if int(start_time) > int(latest_time):
+                    latest_time = start_time
+        old_name = os.path.join(dirpath, file)
+        new_name = os.path.join(dirpath, "latest.jpg")
+        shutil.copy(old_name, new_name)
