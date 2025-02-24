@@ -1,13 +1,23 @@
 from netCDF4 import Dataset
-import matplotlib
-import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 import os
 
-finalImageShape = (1356, 1356)
 #reshape the array of data by finding the average of the values
-def rebin(a, shape):
+def rebin(a):
+    if (a.shape[0] % 10848 == 0) and (a.shape[1] % 10848 == 0):
+        shape = (1356, 1356)
+    elif (a.shape[0] % 750 == 0) and (a.shape[1] % 1250 == 0):
+        shape = (750, 1250)
+    elif (a.shape[0] % 1000 == 0) and (a.shape[1] % 1000 == 0):
+        shape = (1000, 1000)
+    elif (a.shape[0] % 500 == 0) and (a.shape[1] % 500 == 0):
+        shape = (500, 500)
+    else:
+        print("Unhandled image dimensions")
+        print(a.shape[0])
+        print(a.shape[1])
+        exit()
     sh = shape[0],a.shape[0]//shape[0],shape[1],a.shape[1]//shape[1]
     return a.reshape(sh).mean(-1).mean(1)
 
@@ -20,11 +30,11 @@ def scaleVals(min, max, arr):
     return scaled_arr.astype(np.uint8)
 
 #Load in netCDF File, read radiance values, convert to reflectance, save as image
-def loadFile(filename):
+def loadFile(filename, dest):
     #Open netCDF file and load relevant values to variables
     g16nc = Dataset(filename, 'r')
     radiance = g16nc.variables['Rad'][:] #Load 2d array of radiance values
-    radiance = rebin(radiance, finalImageShape) #reshape to smaller data array
+    radiance = rebin(radiance) #reshape to smaller data array
     ir_band = g16nc.variables['band_id'][:][0] #load id of this ir band
 
     #If its IR band 1-6, convert radiance to reflectance
@@ -54,7 +64,7 @@ def loadFile(filename):
     #save image
     img = Image.fromarray(greyscale_img, mode="L")
     #img.show()
-    img.save("../Sample Images/" + filename[:-3] + ".jpg")
+    img.save(dest + filename[:-3] + ".jpg")
     
 
     #close file
@@ -65,10 +75,36 @@ def loadFile(filename):
 #Temp code to clear console during development
 clear = lambda: os.system('cls')
 clear()
-path = "../netCDF Unprocessed/" #path to folder of unprocessed netcdf files
+
+path = "../netCDF Unprocessed/Full Disk" #path to folder of unprocessed netcdf files
+dest = "../../Sample Images/Full Disk/" #Path to destination for saved image
 os.chdir(path) #change directory to folder
 for file in os.listdir(): #iterate through all files in folder
     if file.endswith(".nc"):
         filename = f"{file}"
-        print(filename)
-        loadFile(filename)
+        #print(filename)
+        loadFile(filename, dest)
+        new_path = os.path.join("../../netCDF Processed/Full Disk", filename)
+        os.replace(filename, new_path)
+
+path = "../Conus" #path to folder of unprocessed netcdf files
+dest = "../../Sample Images/Conus/" #Path to destination for saved image
+os.chdir(path) #change directory to folder
+for file in os.listdir(): #iterate through all files in folder
+    if file.endswith(".nc"):
+        filename = f"{file}"
+        #print(filename)
+        loadFile(filename, dest)
+        new_path = os.path.join("../../netCDF Processed/Conus", filename)
+        os.replace(filename, new_path)
+
+path = "../Meso" #path to folder of unprocessed netcdf files
+dest = "../../Sample Images/Meso/" #Path to destination for saved image
+os.chdir(path) #change directory to folder
+for file in os.listdir(): #iterate through all files in folder
+    if file.endswith(".nc"):
+        filename = f"{file}"
+        #print(filename)
+        loadFile(filename, dest)
+        new_path = os.path.join("../../netCDF Processed/Meso", filename)
+        os.replace(filename, new_path)
