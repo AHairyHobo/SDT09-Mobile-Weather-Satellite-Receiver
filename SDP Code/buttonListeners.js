@@ -14,7 +14,7 @@ function imagePath() {
   if(typeText == "IR Band 8") typeString = "08/";
   if(typeText == "IR Band 9") typeString = "09/";
   if(typeText == "IR Band 10") typeString = "10/";
-  if(typeText == "IR Band 11") typeString = "1/";
+  if(typeText == "IR Band 11") typeString = "11/";
   if(typeText == "IR Band 12") typeString = "12/";
   if(typeText == "IR Band 13") typeString = "13/";
   if(typeText == "IR Band 14") typeString = "14/";
@@ -22,8 +22,8 @@ function imagePath() {
   if(typeText == "IR Band 16") typeString = "16/";
   if(sectorText == "Continental U.S.") sectorString = "Conus/";
   if(sectorText == "Full Disk") sectorString = "Full Disk/";
-  if(sectorText == "M1") sectorString = "Meso/M1/";
-  if(sectorText == "M2") sectorString = "Meso/M2/";
+  if(sectorText == "Meso M1") sectorString = "Meso/M1/";
+  if(sectorText == "Meso M2") sectorString = "Meso/M2/";
   if(sectorString == "" || typeString == "") {
     sectorString = "";
     typeString = "";

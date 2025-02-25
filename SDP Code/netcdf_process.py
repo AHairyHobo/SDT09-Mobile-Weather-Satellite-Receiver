@@ -23,6 +23,7 @@ def rebin(a):
     sh = shape[0],a.shape[0]//shape[0],shape[1],a.shape[1]//shape[1]
     return a.reshape(sh).mean(-1).mean(1)
 
+#Scale floating point values in a given range to an 8 bit integer
 def scaleVals(min, max, arr):
     # Avoid division by zero if min and max values are the same
     if max == min:
