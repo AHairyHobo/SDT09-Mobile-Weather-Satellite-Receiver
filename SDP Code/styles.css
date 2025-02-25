@@ -6,10 +6,12 @@ body {
     background-color: #A89968;
 }
 
-#header,
+h1 {
+    margin: 0;
+}
+
 #footer,
 #sidebar,
-#content,
 #pageList {
     padding: 20px;
 }
@@ -24,6 +26,7 @@ body {
 
 #header {
     width: 100%;
+    padding: 5px;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 10px;
@@ -49,7 +52,7 @@ body {
 
 #content {
     width: 100%;
-    background-color: #FFF7E9;
+    height: 550px;
 }
 
 #pageList {
