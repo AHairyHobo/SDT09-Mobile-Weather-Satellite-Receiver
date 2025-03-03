@@ -33,9 +33,9 @@ def scaleVals(min, max, arr):
     return scaled_arr.astype(np.uint8)
 
 #Load in netCDF File, read radiance values, convert to reflectance, save as image
-def loadFile(filename, dest):
+def process(file_path, dest):
     #Open netCDF file and load relevant values to variables
-    g16nc = Dataset(filename, 'r')
+    g16nc = Dataset(file_path, 'r')
     radiance = g16nc.variables['Rad'][:] #Load 2d array of radiance values
     radiance = rebin(radiance) #reshape to smaller data array
     ir_band = g16nc.variables['band_id'][:][0] #load id of this ir band
@@ -56,7 +56,7 @@ def loadFile(filename, dest):
         reflectance = np.sqrt(reflectance)
         greyscale_img = (reflectance*255).astype(np.uint8) #scale float to 8 bit int
 
-    #If its IR band 7-16, convert radiance to temperature kelvin
+    #If its IR band 7-16
     else:
         #load min/max values
         min = g16nc.variables['min_radiance_value_of_valid_pixels'][:]
@@ -69,45 +69,34 @@ def loadFile(filename, dest):
     #img.show()
     img.save(dest)
     
-
     #close file
     g16nc.close()
     g16nc = None
 
+def loadFiles(sector):
+    path = "../netCDF Unprocessed/" + sector #path to folder of unprocessed netcdf files
+    dest = "../Sample Images/" + sector #Path to destination for saved image
+    for file in os.listdir(path): #iterate through all files in folder
+        if file.endswith(".nc"):
+            filename = f"{file}"
+            file_path = os.path.join(path, filename)
+            if sector == "Meso":
+                dest_path = os.path.join(dest, filename[14:16], filename[20:22], filename[:-3] + ".jpg")
+            else:
+                dest_path = os.path.join(dest, filename[19:21], filename[:-3] + ".jpg")
+            process(file_path, dest_path)
+            new_path = os.path.join("../netCDF Processed", sector, filename)
+            os.replace(file_path, new_path)
 
 #Temp code to clear console during development
 clear = lambda: os.system('cls')
 clear()
 
-path = "../netCDF Unprocessed/Full Disk" #path to folder of unprocessed netcdf files
-dest = "../../Sample Images/Full Disk" #Path to destination for saved image
-os.chdir(path) #change directory to folder
-for file in os.listdir(): #iterate through all files in folder
-    if file.endswith(".nc"):
-        filename = f"{file}"
-        dest_path = os.path.join(dest, filename[19:21], filename[:-3] + ".jpg")
-        loadFile(filename, dest_path)
-        new_path = os.path.join("../../netCDF Processed/Full Disk", filename)
-        os.replace(filename, new_path)
+sector = "Full Disk"
+loadFiles(sector)
 
-path = "../Conus" #path to folder of unprocessed netcdf files
-dest = "../../Sample Images/Conus" #Path to destination for saved image
-os.chdir(path) #change directory to folder
-for file in os.listdir(): #iterate through all files in folder
-    if file.endswith(".nc"):
-        filename = f"{file}"
-        dest_path = os.path.join(dest, filename[19:21], filename[:-3] + ".jpg")
-        loadFile(filename, dest_path)
-        new_path = os.path.join("../../netCDF Processed/Conus", filename)
-        os.replace(filename, new_path)
+sector = "Conus"
+loadFiles(sector)
 
-path = "../Meso" #path to folder of unprocessed netcdf files
-dest = "../../Sample Images/Meso" #Path to destination for saved image
-os.chdir(path) #change directory to folder
-for file in os.listdir(): #iterate through all files in folder
-    if file.endswith(".nc"):
-        filename = f"{file}"
-        dest_path = os.path.join(dest, filename[14:16], filename[20:22], filename[:-3] + ".jpg")
-        loadFile(filename, dest_path)
-        new_path = os.path.join("../../netCDF Processed/Meso", filename)
-        os.replace(filename, new_path)
+sector = "Meso"
+loadFiles(sector)
