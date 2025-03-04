@@ -19,6 +19,7 @@ for dirpath, dirname, filenames in os.walk(path):
                     start_time = file[27:41]
                 if int(start_time) > int(latest_time):
                     latest_time = start_time
-        old_name = os.path.join(dirpath, file)
-        new_name = os.path.join(dirpath, "latest.jpg")
-        shutil.copy(old_name, new_name)
+        if os.listdir(dirpath): #checks if directory is empty, only runs if it contains files
+            old_name = os.path.join(dirpath, file)
+            new_name = os.path.join(dirpath, "latest.jpg")
+            shutil.copy(old_name, new_name)
