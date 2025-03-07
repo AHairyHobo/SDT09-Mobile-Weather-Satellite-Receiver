@@ -1,3 +1,53 @@
+var gifImages = ["../Sample Images/Full Disk/GeoColor/OR_ABI-L1b-RadF-M6C01_G16_s20250542250205_e20250542259513_c20250542259542.jpg", "../Sample Images/Full Disk/GeoColor/OR_ABI-L1b-RadF-M6C01_G16_s20250542350205_e20250542359513_c20250542359557.jpg", "../Sample Images/Full Disk/GeoColor/OR_ABI-L1b-RadF-M6C01_G16_s20250550050205_e20250550059513_c20250550059549.jpg", "../Sample Images/Full Disk/GeoColor/OR_ABI-L1b-RadF-M6C01_G16_s20250550150205_e20250550159513_c20250550159558.jpg"]
+var aniIndex = 0;
+var intervalID;
+var sector = "Full Disk/"
+var type = "01/"
+var numImages = 12;
+var imageDirPath = "../Sample Images" + sector + type;
+
+const fs = require('fs');
+const path = require('path');
+
+
+function animationLoop(){
+  intervalID = setInterval(function(){
+    document.getElementById('image').src = gifImages[aniIndex]; //set image to next frame
+    aniIndex++; //increase frame number
+    if(aniIndex >= Math.min(gifImages.length, numImages)){ //if animation frame exceeds length of image array or number of desired images, reset to 0
+      aniIndex = 0; //reset to frame 0
+    }
+  }, 41.666) //miliseconds between each frame
+}
+
+function startAnimation(){
+  aniIndex = 0; //set to frame 0
+  clearInterval(intervalID) //stop any running animation loop processes
+  animationLoop() //start animation
+}
+
+function pauseAnimation(){
+  clearInterval(intervalID) //stop any running animation loop processes
+}
+
+function resumeAnimation(){
+  clearInterval(intervalID) //stop any running animation loop processes
+  animationLoop() //start animation loop
+}
+
+
+
+function getFilesInDirectory(directoryPath) {
+  try {
+    const files = fs.readdirSync(directoryPath);
+    return files.map(file => path.join(directoryPath, file)); // Return full paths
+  } catch (err) {
+    console.error("Error reading directory:", err);
+    return [];
+  }
+}
+
+
 /*Get path to correct latest image*/
 function imagePath() {
   var sectorString = "";
@@ -595,4 +645,13 @@ window.onclick = function (event) {
       }
     }
   }
+}
+
+// Example usage:
+const files = getFilesInDirectory(imageDirPath);
+if (files.length > 0) {
+  console.log("Files in directory:");
+  files.forEach(file => console.log(file));
+} else {
+  console.log("Directory is empty or does not exist.");
 }
