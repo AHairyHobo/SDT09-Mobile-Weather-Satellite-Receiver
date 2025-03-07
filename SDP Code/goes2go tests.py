@@ -8,7 +8,7 @@ meso_path = "C:/Users/Sam/Documents/Senior Design Project/netCDF Unprocessed/Mes
 
 #Download time range of full disk images
 G = GOES(satellite=16, product="ABI-L1b-RadF")
-G.timerange(recent='30min')
+G.timerange(recent='1440min')
 #Move files to new directory in project folder
 root = "C:/Users/Sam/data/noaa-goes16/ABI-L1b-RadF"
 for dirpath, dirnames, filenames in os.walk(root):
@@ -19,7 +19,7 @@ for dirpath, dirnames, filenames in os.walk(root):
 
 #Download time range of Continental US images        
 G = GOES(satellite=16, product="ABI-L1b-RadC")
-G.timerange(recent='30min')
+G.timerange(recent='1440min')
 #Move to new directory in project folder
 root = "C:/Users/Sam/data/noaa-goes16/ABI-L1b-RadC"
 for dirpath, dirnames, filenames in os.walk(root):
@@ -30,7 +30,7 @@ for dirpath, dirnames, filenames in os.walk(root):
 
 #Download mesoscale images
 G = GOES(satellite=16, product="ABI-L1b-RadM")
-G.timerange(recent='30min')
+G.timerange(recent='1440min')
 #Move to new directory in project folder
 root = "C:/Users/Sam/data/noaa-goes16/ABI-L1b-RadM"
 for dirpath, dirnames, filenames in os.walk(root):

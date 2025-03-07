@@ -20,6 +20,7 @@ function imagePath() {
   if(typeText == "IR Band 14") typeString = "14/";
   if(typeText == "IR Band 15") typeString = "15/";
   if(typeText == "IR Band 16") typeString = "16/";
+  if(typeText == "GeoColor") typeString = "GeoColor/";
   if(sectorText == "Continental U.S.") sectorString = "Conus/";
   if(sectorText == "Full Disk") sectorString = "Full Disk/";
   if(sectorText == "Meso M1") sectorString = "Meso/M1/";

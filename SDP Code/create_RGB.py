@@ -2,7 +2,7 @@ import numpy as np
 from PIL import Image
 import os
 
-def GeoColor(chan1, chan2, chan3, path, num):
+def GeoColor(chan1, chan2, chan3, path, file):
     true_green = 0.48358168 * chan2 + 0.45706946 * chan1 + 0.06038137 * chan3
     truecolor = np.stack([chan2, true_green, chan1], axis=2)
 
@@ -11,7 +11,7 @@ def GeoColor(chan1, chan2, chan3, path, num):
     #print(truecolor)
     img = Image.fromarray(rgbImage, mode="RGB")
     #img.show()  
-    img.save(os.path.join(path, "GeoColor", str(num) + ".jpg"))
+    img.save(os.path.join(path, "GeoColor", file))
 
 def loadFiles(path):
     channel1_files = os.listdir(os.path.join(path, "01"))
@@ -49,7 +49,9 @@ def loadFiles(path):
 
     #channels = [channel1_files, channel2_files, channel3_files, channel4_files, channel5_files, channel6_files, channel7_files, channel8_files, channel9_files, channel10_files, channel11_files, channel12_files, channel13_files, channel14_files, channel15_files, channel16_files]
 
-    for i in range(len(channel1_files)):
+    numImages = min(len(channel1_files), len(channel2_files), len(channel3_files))
+
+    for i in range(numImages):
         chan1 = Image.open(os.path.join(path, "01", channel1_files[i]))
         chan2 = Image.open(os.path.join(path, "02", channel2_files[i]))
         chan3 = Image.open(os.path.join(path, "03", channel3_files[i]))
@@ -57,7 +59,7 @@ def loadFiles(path):
         chan2_array = np.array(chan2)
         chan3_array = np.array(chan3)
 
-        GeoColor(chan1_array, chan2_array, chan3_array, path, i)
+        GeoColor(chan1_array, chan2_array, chan3_array, path, channel1_files[i])
 
 
 #Temp code to clear console during development
@@ -66,10 +68,12 @@ clear()
 
 path = "../Sample Images/Full Disk"
 loadFiles(path)
-'''
+
 path = "../Sample Images/Conus"
 loadFiles(path)
 
-path = "../Sample Images/Meso"
+path = "../Sample Images/Meso/M1"
 loadFiles(path)
-'''
+
+path = "../Sample Images/Meso/M2"
+loadFiles(path)
