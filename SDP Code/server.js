@@ -1,5 +1,13 @@
 const http = require('http');
 const fs = require('fs');
+// var cors = require('cors')
+
+// const corsOptions ={
+//   origin:'http://localhost:3000', 
+//   credentials:true,            //access-control-allow-credentials:true
+//   optionSuccessStatus:200
+// }
+// app.use(cors(corsOptions));
 
 function getFilesInDirectory(directoryPath) {
     fs.readdir(directoryPath, (err, files) => {
@@ -26,10 +34,11 @@ const server = http.createServer((req, res) => {
         
         files.forEach(file => {
             responseText += "\n" + file.toString();
-            console.log(file);
+            //console.log(file);
         });
         res.end(responseText);
       });
+
 });
 
 server.listen(3000, 'localhost', () => {

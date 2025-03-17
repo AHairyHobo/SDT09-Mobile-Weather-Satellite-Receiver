@@ -2,28 +2,28 @@
 <html>
 
 <head>
-    <title>Live Data</title>
+    <title>Historic Data</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <div id="header">
-        <h1>Live Data Viewer</h1>
+        <h1>Historic Data Viewer</h1>
     </div>
     <div id="container">
         <div id="sidebar">
-            <a href="index.html">Home</a>
-            <a href="historic_data.html">Historical Data</a>
-            <a href="about.html">About the Team</a>
+            <a href="/">Home</a>
+            <a href="/live_data">Live Data</a>
+            <a href="/about">About the Team</a>
         </div>
         <div id="content">
-            <img src="../Sample Images/Full Disk/01/latest.jpg" alt="latest.jpg" style='height: 100%; width: 100%; object-fit: contain' id="image">
+            Images Coming Soon!
         </div>
         <div id="sidebar">
             <div class="dropdownContainer">
                 Map Sector <br>
                 <div class="dropdown">
-                    <button onclick="sectorDropdownClick()" class="dropbtn" id="sectorButton">Full Disk</button>
+                    <button onclick="sectorDropdownClick()" class="dropbtn" id="sectorButton">None</button>
                     <div id="sectorDropdown" class="dropdown-content">
                         <button onclick="sector1()" id="sector1Button">Continental U.S.</button>
                         <button onclick="sector2()" id="sector2Button">Full Disk</button>
@@ -55,7 +55,7 @@
             <div class="dropdownContainer">
                 Image Type <br>
                 <div class="dropdown">
-                    <button onclick="imageTypeDropdownClick()" class="dropbtn" id="imageTypeButton">IR Band 1</button>
+                    <button onclick="imageTypeDropdownClick()" class="dropbtn" id="imageTypeButton">None</button>
                     <div id="imageTypeDropdown" class="dropdown-content">
                         <button onclick="type1()" id="type1Button">IR Band 1</button>
                         <button onclick="type2()" id="type2Button">IR Band 2</button>
@@ -88,7 +88,7 @@
             <div class="dropdownContainer">
                 # of Images <br>
                 <div class="dropdown">
-                    <button onclick="numImagesDropdownClick()" class="dropbtn" id="numImagesButton">12</button>
+                    <button onclick="numImagesDropdownClick()" class="dropbtn" id="numImagesButton">None</button>
                     <div id="numImagesDropdown" class="dropdown-content">
                         <button onclick="num1()" id="num1Button">12</button>
                         <button onclick="num2()" id="num2Button">24</button>
@@ -119,18 +119,11 @@
                     </div>
                 </div>
             </div>
-            <br>
-            <button onclick="startAnimation()" class="anibtn" id="startbtn">Start Animation</button>
-            <button onclick="pauseAnimation()" class="anibtn" id="pausebtn">Pause Animation</button>
-            <button onclick="resumeAnimation()" class="anibtn" id="resumebtn">Resume Animation</button>
         </div>
     </div>
     <div id="footer">
-        • 2024-2025 Senior Design Capstone Project • Dr. Nathan Ida, Faculty Advisor • Dr. Michael Lichter,
-        Senior
-        Design Coordinator • Department of Electrical and Computer Engineering • College of Engineering •
-        University
-        of
+        • 2024-2025 Senior Design Capstone Project • Dr. Nathan Ida, Faculty Advisor • Dr. Michael Lichter, Senior
+        Design Coordinator • Department of Electrical and Computer Engineering • College of Engineering • University of
         Akron •
     </div>
     <script src="buttonListeners.js"></script>

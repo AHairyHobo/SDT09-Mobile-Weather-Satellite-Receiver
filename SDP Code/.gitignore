@@ -1,5 +1,6 @@
 #Other unwanted project files
 ../Sample\ Signal/
+./node_modules
 
 
 # Byte-compiled / optimized / DLL files
