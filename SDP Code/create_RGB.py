@@ -2,20 +2,21 @@ import numpy as np
 from PIL import Image
 import os
 
-def GeoColor(chan1, chan2, chan3, path, file):
-    true_green = 0.48358168 * chan2 + 0.45706946 * chan1 + 0.06038137 * chan3
-    truecolor = np.stack([chan2, true_green, chan1], axis=2)
+#Combines channel 1, 2, and 3 to create GeoColor Image
+def GeoColor(chan1, chan2, chan3, path, file): #arguments IR channels, path to where images will be saved, and file name for new image
+    true_green = 0.48358168 * chan2 + 0.45706946 * chan1 + 0.06038137 * chan3 #Combine channels to create a more realistic green color
+    truecolor = np.stack([chan2, true_green, chan1], axis=2) #stack 2d arrays to make 3d array
 
-    rgbImage = truecolor.astype(np.uint8)
+    rgbImage = truecolor.astype(np.uint8) #Make sure values are 8 bit ints
 
     #print(truecolor)
-    img = Image.fromarray(rgbImage, mode="RGB")
+    img = Image.fromarray(rgbImage, mode="RGB") #use pillow library to turn 3d array into image file
     #img.show()  
-    img.save(os.path.join(path, "GeoColor", file))
+    img.save(os.path.join(path, "GeoColor", file)) #save image at the given path with the given name
 
 def loadFiles(path):
-    channel1_files = os.listdir(os.path.join(path, "01"))
-    channel1_files.remove("latest.jpg")
+    channel1_files = os.listdir(os.path.join(path, "01")) #returns array containing strings of every file within directory
+    channel1_files.remove("latest.jpg") #remove the latest image as it is a copy
     channel2_files = os.listdir(os.path.join(path, "02"))
     channel2_files.remove("latest.jpg")
     channel3_files = os.listdir(os.path.join(path, "03"))
@@ -49,7 +50,7 @@ def loadFiles(path):
 
     #channels = [channel1_files, channel2_files, channel3_files, channel4_files, channel5_files, channel6_files, channel7_files, channel8_files, channel9_files, channel10_files, channel11_files, channel12_files, channel13_files, channel14_files, channel15_files, channel16_files]
 
-    numImages = min(len(channel1_files), len(channel2_files), len(channel3_files))
+    numImages = min(len(channel1_files), len(channel2_files), len(channel3_files)) #make sure each channel has same amount of files, use the min amount
 
     for i in range(numImages):
         chan1 = Image.open(os.path.join(path, "01", channel1_files[i]))
