@@ -7,4 +7,7 @@ Python code requires use of the Pillow library
 
 LRIT file specification found at https://www.cgms-info.org/wp-content/uploads/2021/10/cgms-lrit-hrit-global-specification-(v2-8-of-30-oct-2013).pdf
 
-Hi
+Instructions for starting server
+1. Navigate to the directory containing code /SDP Code in terminal
+2. Run the command "nodemon app"
+3. Connect to webserver in a browser at localhost:3000

@@ -57,12 +57,14 @@ h1 {
 
 #pageList {
     width: 100%;
-    background-image: url('website_images/full_disk_image.jpg');
+    background-image: url('/images/website_images/full_disk_image.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
     margin-bottom: 10px;
     text-align: center;
+    padding-bottom: 100px;
+    padding-top: 100px;
 }
 
 #pageList a,
