@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Location</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="header">
+        <h1>Select Your Nearest Location</h1>
+    </div>
+    <div id="container">
+        <div id="sidebar">
+            <a href="/">Home</a>
+            <a href="/live_data">Live Data</a>
+            <a href="/historic_data">Historical Data</a>
+            <a href="/about">About the Team</a>
+        </div>
+        <div id="content">
+            <div id="currentLocationText"></div>
+            <br>
+            <div class="dropdownContainer">
+                <div class="dropdown">
+                    <button onclick="alaskaRegionDropdownClick()" class="dropbtn" id="alaskaRegionButton">Alaska
+                        Region</button>
+                    <div id="alaskaRegionDropdown" class="dropdown-content">
+                        <button onclick="regionName('AFC')">AFC [Anchorage, Alaska]</button>
+                        <button onclick="regionName('AFG')">AFG [Fairbanks, Alaska]</button>
+                        <button onclick="regionName('AJK')">AJK [Juneau, Alaska]</button>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdownContainer">
+                <div class="dropdown">
+                    <button onclick="centralRegionDropdownClick()" class="dropbtn" id="centralRegionButton">Central
+                        Region</button>
+                    <div id="centralRegionDropdown" class="dropdown-content">
+                        <button onclick="regionName('ABR')">ABR [Aberdeen, South Dakota]</button>
+                        <button onclick="regionName('APX')">APX [North Central Lower Michigan]</button>
+                        <button onclick="regionName('ARX')">ARX [La Crosse, Wisconsin]</button>
+                        <button onclick="regionName('BIS')">BIS [Bismarck, North Dakota]</button>
+                        <button onclick="regionName('BOU')">BOU [Denver/Boulder Colorado]</button>
+                        <button onclick="regionName('CYS')">CYS [Cheyenne, Wyoming]</button>
+                        <button onclick="regionName('DDC')">DDC [Dodge City, Kansas]</button>
+                        <button onclick="regionName('DLH')">DLH [Duluth, Minnesota]</button>
+                        <button onclick="regionName('DMX')">DMX [Des Moines, Iowa]</button>
+                        <button onclick="regionName('DTX')">DTX [Detroit, Michigan]</button>
+                        <button onclick="regionName('DVN')">DVN [Quad Cities, Iowa]</button>
+                        <button onclick="regionName('EAX')">EAX [Kansas City, Pleasant Hill Missouri]</button>
+                        <button onclick="regionName('FGF')">FGF [Eastern North Dakota]</button>
+                        <button onclick="regionName('FSD')">FSD [Sioux Falls, South Dakota]</button>
+                        <button onclick="regionName('GID')">GID [Hastings, Nebraska]</button>
+                        <button onclick="regionName('GJT')">GJT [Grand Junction, Colorado]</button>
+                        <button onclick="regionName('GLD')">GLD [Goodland, Kansas]</button>
+                        <button onclick="regionName('GRB')">GRB [Green Bay, Wisconsin]</button>
+                        <button onclick="regionName('GRR')">GRR [Grand Rapids, Michigan]</button>
+                        <button onclick="regionName('ICT')">ICT [Wichita, Kansas]</button>
+                        <button onclick="regionName('ILX')">ILX [Central Illinois]</button>
+                        <button onclick="regionName('IND')">IND [Indianapolis, Indiana]</button>
+                        <button onclick="regionName('IWX')">IWX [Northern Indiana]</button>
+                        <button onclick="regionName('JKL')">JKL [Jackson, Kentucky]</button>
+                        <button onclick="regionName('LBF')">LBF [North Platte, Nebraska]</button>
+                        <button onclick="regionName('LMK')">LMK [Louisville, Kentucky]</button>
+                        <button onclick="regionName('LOT')">LOT [Chicago, Illinois]</button>
+                        <button onclick="regionName('LSX')">LSX [St Louis, Missouri]</button>
+                        <button onclick="regionName('MKX')">MKX [Milwaukee, Wisconsin]</button>
+                        <button onclick="regionName('MPX')">MPX [Minneapolis, Minnesota]</button>
+                        <button onclick="regionName('MQT')">MQT [Marquette, Michigan]</button>
+                        <button onclick="regionName('OAX')">OAX [Omaha, Nebraska]</button>
+                        <button onclick="regionName('PAH')">PAH [Paducah, Kentucky]</button>
+                        <button onclick="regionName('PUB')">PUB [Pueblo, Colorado]</button>
+                        <button onclick="regionName('RIW')">RIW [Riverton, Wyoming]</button>
+                        <button onclick="regionName('SGF')">SGF [Springfield, Missouri]</button>
+                        <button onclick="regionName('TOP')">TOP [Topeka, Kansas]</button>
+                        <button onclick="regionName('UNR')">UNR [Rapid City, South Dakota]</button>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdownContainer">
+                <div class="dropdown">
+                    <button onclick="easternRegionDropdownClick()" class="dropbtn" id="easternRegionButton">Eastern
+                        Region</button>
+                    <div id="easternRegionDropdown" class="dropdown-content">
+                        <button onclick="regionName('AKQ')">AKQ [Wakefield, Virginia]</button>
+                        <button onclick="regionName('ALY')">ALY [Albany, New York]</button>
+                        <button onclick="regionName('BGM')">BGM [Binghamton, New York]</button>
+                        <button onclick="regionName('BOX')">BOX [Boston, Massachusetts]</button>
+                        <button onclick="regionName('BTV')">BTV [Burlington, Vermont]</button>
+                        <button onclick="regionName('BUF')">BUF [Buffalo, New York]</button>
+                        <button onclick="regionName('CAE')">CAE [Columbia, South Carolina]</button>
+                        <button onclick="regionName('CAR')">CAR [Caribou, Maine]</button>
+                        <button onclick="regionName('CHS')">CHS [Charleston, South Carolina]</button>
+                        <button onclick="regionName('CLE')">CLE [Cleveland, Ohio]</button>
+                        <button onclick="regionName('CTP')">CTP [Central Pennsylvania]</button>
+                        <button onclick="regionName('GSP')">GSP [Greenville/Spartanburg, South Carolina]</button>
+                        <button onclick="regionName('GYX')">GYX [Portland, Maine]</button>
+                        <button onclick="regionName('ILM')">ILM [Wilmington, North Carolina]</button>
+                        <button onclick="regionName('ILN')">ILN [Cincinnati, Ohio]</button>
+                        <button onclick="regionName('LWX')">LWX [Baltimore, Maryland/Washington DC]</button>
+                        <button onclick="regionName('MHX')">MHX [Morehead City, North Carolina]</button>
+                        <button onclick="regionName('OKX')">OKX [New York, New York]</button>
+                        <button onclick="regionName('PBZ')">PBZ [Pittsburgh, Pennsylvania]</button>
+                        <button onclick="regionName('PHI')">PHI [Philadelphia/Mt Holly, New Jersey]</button>
+                        <button onclick="regionName('RAH')">RAH [Raleigh, North Carolina]</button>
+                        <button onclick="regionName('RLX')">RLX [Charleston, West Virginia]</button>
+                        <button onclick="regionName('RNK')">RNK [Blacksburg, Virginia]</button>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdownContainer">
+                <div class="dropdown">
+                    <button onclick="pacificRegionDropdownClick()" class="dropbtn" id="easternRegionButton">Pacific
+                        Region</button>
+                    <div id="pacificRegionDropdown" class="dropdown-content">
+                        <button onclick="regionName('HFO')">HFO [Honolulu, Hawaii]</button>
+                        <button onclick="regionName('PGUM')">PGUM [Guam]</button>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdownContainer">
+                <div class="dropdown">
+                    <button onclick="southernRegionDropdownClick()" class="dropbtn" id="southernRegionButton">Southern
+                        Region</button>
+                    <div id="southernRegionDropdown" class="dropdown-content">
+                        <button onclick="regionName('ABQ')">ABQ [Albuquerque, New Mexico]</button>
+                        <button onclick="regionName('AMA')">AMA [Amarillo, Texas]</button>
+                        <button onclick="regionName('BMX')">BMX [Birmingham, Alabama]</button>
+                        <button onclick="regionName('BRO')">BRO [Brownsville, Texas]</button>
+                        <button onclick="regionName('CRP')">CRP [Corpus Christi, Texas]</button>
+                        <button onclick="regionName('EPZ')">EPZ [El Paso, Texas]</button>
+                        <button onclick="regionName('EWX')">EWX [Austin/San Antonio, Texas]</button>
+                        <button onclick="regionName('FFC')">FFC [Atlanta, Georgia]</button>
+                        <button onclick="regionName('FWD')">FWD [Dallas/Ft Worth, Texas]</button>
+                        <button onclick="regionName('HGX')">HGX [Houston/Galveston, Texas]</button>
+                        <button onclick="regionName('HUN')">HUN [Huntsville, Alabama]</button>
+                        <button onclick="regionName('JAN')">JAN [Jackson, Mississippi]</button>
+                        <button onclick="regionName('JAX')">JAX [Jacksonville, Florida]</button>
+                        <button onclick="regionName('KEY')">KEY [Key West, Florida]</button>
+                        <button onclick="regionName('LCH')">LCH [Lake Charles, Louisiana]</button>
+                        <button onclick="regionName('LIX')">LIX [New Orleans/Baton Rouge, Louisiana]</button>
+                        <button onclick="regionName('LUB')">LUB [Lubbock, Texas]</button>
+                        <button onclick="regionName('LZK')">LZK [Little Rock, Arkansas]</button>
+                        <button onclick="regionName('MAF')">MAF [Midland/Odessa, Texas]</button>
+                        <button onclick="regionName('MEG')">MEG [Memphis, Tennessee]</button>
+                        <button onclick="regionName('MFL')">MFL [Miami, Florida]</button>
+                        <button onclick="regionName('MLB')">MLB [Melbourne, Florida]</button>
+                        <button onclick="regionName('MOB')">MOB [Mobile, Alabama]</button>
+                        <button onclick="regionName('MRX')">MRX [Knoxville/Tri-Cities, Tennessee]</button>
+                        <button onclick="regionName('OHX')">OHX [Nashville, Tennessee]</button>
+                        <button onclick="regionName('OUN')">OUN [Oklahoma City, Oklahoma]</button>
+                        <button onclick="regionName('SHV')">SHV [Shreveport, Louisiana]</button>
+                        <button onclick="regionName('SJT')">SJT [San Angelo, Texas]</button>
+                        <button onclick="regionName('SJU')">SJU [San Juan, Puerto Rico]</button>
+                        <button onclick="regionName('TAE')">TAE [Tallahassee, Florida]</button>
+                        <button onclick="regionName('TBW')">TBW [Tampa Bay, Florida]</button>
+                        <button onclick="regionName('TSA')">TSA [Tulsa, Oklahoma]</button>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdownContainer">
+                <div class="dropdown">
+                    <button onclick="westernRegionDropdownClick()" class="dropbtn" id="westernRegionButton">Western
+                        Region</button>
+                    <div id="westernRegionDropdown" class="dropdown-content">
+                        <button onclick="regionName('BOI')">BOI [Boise, Idaho]</button>
+                        <button onclick="regionName('BYZ')">BYZ [Billings, Montana]</button>
+                        <button onclick="regionName('EKA')">EKA [Eureka, California]</button>
+                        <button onclick="regionName('FGZ')">FGZ [Flagstaff, Arizona]</button>
+                        <button onclick="regionName('GGW')">GGW [Glasgow, Montana]</button>
+                        <button onclick="regionName('HNX')">HNX [San Joaquin Valley, California]</button>
+                        <button onclick="regionName('LKN')">LKN [Elko, Nevada]</button>
+                        <button onclick="regionName('LOX')">LOX [Los Angeles, California]</button>
+                        <button onclick="regionName('MFR')">MFR [Medford, Oregon]</button>
+                        <button onclick="regionName('MSO')">MSO [Missoula, Montana]</button>
+                        <button onclick="regionName('MTR')">MTR [San Francisco Bay Area, California]</button>
+                        <button onclick="regionName('OTX')">OTX [Spokane, Washington]</button>
+                        <button onclick="regionName('PDT')">PDT [Pendleton, Oregon]</button>
+                        <button onclick="regionName('PIH')">PIH [Pocatello/Idaho Falls, Idaho]</button>
+                        <button onclick="regionName('PQR')">PQR [Portland, Oregon]</button>
+                        <button onclick="regionName('PSR')">PSR [Phoenix, Arizona]</button>
+                        <button onclick="regionName('REV')">REV [Reno, Nevada]</button>
+                        <button onclick="regionName('SEW')">SEW [Seattle/Tacoma, Washington]</button>
+                        <button onclick="regionName('SGX')">SGX [San Diego, California]</button>
+                        <button onclick="regionName('SLC')">SLC [Salt Lake City, Utah]</button>
+                        <button onclick="regionName('STO')">STO [Sacramento, California]</button>
+                        <button onclick="regionName('TFX')">TFX [Great Falls, Montana]</button>
+                        <button onclick="regionName('TWC')">TWC [Tucson, Arizona]</button>
+                        <button onclick="regionName('VEF')">VEF [Las Vegas, Nevada]</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        • 2024-2025 Senior Design Capstone Project • Dr. Nathan Ida, Faculty Advisor • Dr. Michael Lichter, Senior
+        Design Coordinator • Department of Electrical and Computer Engineering • College of Engineering • University of
+        Akron •
+    </div>
+    <script src="buttonListeners.js">
+    </script>
+</body>
+
+</html>

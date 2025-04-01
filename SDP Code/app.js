@@ -26,6 +26,10 @@ app.get('/historic_data', (req, res) => {
     res.sendFile('./historic_data.html', {root:root});
 });
 
+app.get('/location', (req, res) => {
+    res.sendFile('./location.html', {root:root});
+});
+
 app.get('/filepath', (req, res) => {
     const queryParams = req.query;
     console.log( queryParams['sector']);

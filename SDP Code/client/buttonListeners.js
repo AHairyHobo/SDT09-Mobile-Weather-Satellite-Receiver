@@ -5,6 +5,7 @@ var sector = "Full%20Disk";
 var type = "01";
 var timeStep = 1;
 var numImages = 12;
+var usr_location = "CLE";
 
 function animationLoop(){
   intervalID = setInterval(function(){
@@ -98,6 +99,24 @@ function numImagesDropdownClick() {
 }
 function timeStepDropdownClick() {
   document.getElementById("timeStepDropdown").classList.toggle("show");
+}
+function alaskaRegionDropdownClick() {
+  document.getElementById("alaskaRegionDropdown").classList.toggle("show");
+}
+function centralRegionDropdownClick() {
+  document.getElementById("centralRegionDropdown").classList.toggle("show");
+}
+function easternRegionDropdownClick() {
+  document.getElementById("easternRegionDropdown").classList.toggle("show");
+}
+function pacificRegionDropdownClick() {
+  document.getElementById("pacificRegionDropdown").classList.toggle("show");
+}
+function southernRegionDropdownClick() {
+  document.getElementById("southernRegionDropdown").classList.toggle("show");
+}
+function westernRegionDropdownClick() {
+  document.getElementById("westernRegionDropdown").classList.toggle("show");
 }
 
 /*Options for sector selection*/
@@ -377,6 +396,12 @@ function step(buttonNum) {
   }
 }
 
+function regionName(reg) {
+  document.getElementById("currentLocationText").innerText = "Current Location for Weather Alerts: " + reg;
+  usr_location = reg;
+  console.log(usr_location);
+}
+
 // Close the dropdown menu if the user clicks outside of it
 window.onclick = function (event) {
   if (!event.target.matches('.dropbtn')) {
@@ -388,5 +413,12 @@ window.onclick = function (event) {
         openDropdown.classList.remove('show');
       }
     }
+  }
+}
+
+window.onload = function(){
+  console.log("test");
+  if(element = document.getElementById("currentLocationText")){
+    element.innerText = "Current Location for Weather Alerts: " + usr_location;
   }
 }
