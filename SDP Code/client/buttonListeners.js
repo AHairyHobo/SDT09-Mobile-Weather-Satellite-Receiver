@@ -86,6 +86,37 @@ async function getFiles(url) {
   }
 }
 
+async function getLocation() {
+  try {
+    const response = await fetch("http://localhost:3000/get_loc");
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const respText = await response.text();
+    return respText;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+async function sendLocation(location) {
+  try {
+    const response = await fetch("http://localhost:3000/send_loc?location=" + location);
+    
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const respText = await response.text();
+    return respText;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+
+
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 function sectorDropdownClick() {
@@ -396,10 +427,12 @@ function step(buttonNum) {
   }
 }
 
-function regionName(reg) {
+async function regionName(reg) {
   document.getElementById("currentLocationText").innerText = "Current Location for Weather Alerts: " + reg;
   usr_location = reg;
-  console.log(usr_location);
+  const loc = await sendLocation(reg)
+  //console.log(usr_location);
+  //console.log(loc);
 }
 
 // Close the dropdown menu if the user clicks outside of it
@@ -416,8 +449,8 @@ window.onclick = function (event) {
   }
 }
 
-window.onload = function(){
-  console.log("test");
+window.onload = async function(){
+  usr_location = await getLocation();
   if(element = document.getElementById("currentLocationText")){
     element.innerText = "Current Location for Weather Alerts: " + usr_location;
   }
