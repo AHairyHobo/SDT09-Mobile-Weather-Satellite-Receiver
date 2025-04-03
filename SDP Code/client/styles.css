@@ -16,13 +16,19 @@ h1 {
     padding: 20px;
 }
 
-#container {
+#container,
+#emwin_header {
     display: flex;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 10px;
 }
+
+#livedataPageLocation {
+    margin-left: 20px;
+}
+
 
 #header {
     width: 100%;
@@ -55,9 +61,16 @@ h1 {
     height: 550px;
 }
 
+#emwin_container {
+    background-color: #FFF7E9;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%
+}
+
 #pageList {
     width: 100%;
-    background-image: url('/images/website_images/full_disk_image.jpg');
+    background-image: url('/images/website_files/full_disk_image.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -82,7 +95,8 @@ h1 {
 #sidebar a:hover,
 .dropbtn:hover,
 .dropbtn:focus, 
-.anibtn:hover {
+.anibtn:hover,
+.emwinbtn:hover {
     text-decoration: underline;
     background-color: #004C9D;
 }
@@ -103,6 +117,18 @@ h1 {
     padding: 5px;
     border: 3px solid #FFF7E9;
     width: 100%;
+}
+.emwinbtn {
+    color: #ffffff;
+    background-color: #041E42;
+    padding: 5px;
+    border: 3px solid #FFF7E9;
+    width: 100px;
+    margin-left: 20px;
+}
+
+#livedataPageLocation {
+    padding: 5px;
 }
 
 .dropdownContainer {

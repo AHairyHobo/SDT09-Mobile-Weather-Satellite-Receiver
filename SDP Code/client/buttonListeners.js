@@ -1,5 +1,6 @@
 var gifImages = ['/images/latest.jpg'];
 var aniIndex = 0;
+var emwinIndex = 0;
 var intervalID;
 var sector = "Full%20Disk";
 var type = "01";
@@ -109,6 +110,20 @@ async function sendLocation(location) {
     }
 
     const respText = await response.text();
+    return respText;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+async function getEmwin(indexString) {
+  try {
+    const response = await fetch("http://localhost:3000/get_emwin?index=" + indexString);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const respText = await response.text();
+    //console.log(returnedList);
     return respText;
   } catch (error) {
     console.error(error.message);
@@ -429,11 +444,25 @@ function step(buttonNum) {
 
 //Called when users location is changed, function changes html text displaying current location, and informs server of change
 async function regionName(reg) {
-  document.getElementById("currentLocationText").innerText = "Current Location for Weather Alerts: " + reg;
+  document.getElementsByClassName("currentLocationText")[0].innerText = "Current Location for Weather Alerts: " + reg;
   usr_location = reg;
-  const loc = await sendLocation(reg)
-  //console.log(usr_location);
-  //console.log(loc);
+  await sendLocation(reg)
+}
+
+async function prevEmwin() {
+  const emwinText = await getEmwin("prev");
+  const element = document.getElementById("emwin_content")
+  if (element != null && emwinText != "") {
+    element.innerText = emwinText;
+  }
+}
+
+async function nextEmwin() {
+  const emwinText = await getEmwin("next");
+  const element = document.getElementById("emwin_content")
+  if (element != null && emwinText != "") {
+    element.innerText = emwinText;
+  }
 }
 
 // Close the dropdown menu if the user clicks outside of it
@@ -452,8 +481,17 @@ window.onclick = function (event) {
 
 //On page load get users location from server and changes html that displays it
 window.onload = async function () {
+  //get current location from server
   usr_location = await getLocation();
-  if (element = document.getElementById("currentLocationText")) {
-    element.innerText = "Current Location for Weather Alerts: " + usr_location;
+  var element = document.getElementsByClassName("currentLocationText")
+  if (element.length > 0) {
+    element[0].innerText = "Current Location for Weather Alerts: " + usr_location;
+  }
+
+  //get text of emwin file
+  emwinText = await getEmwin("curr");
+  element = document.getElementById("emwin_content")
+  if (element != null && emwinText != "") {
+    element.innerText = emwinText;
   }
 }

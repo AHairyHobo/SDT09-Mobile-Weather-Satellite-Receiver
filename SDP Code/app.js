@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const { subscribe } = require('diagnostics_channel');
+const { toInteger } = require('lodash');
 
 //Assigning root directory, client folder within running directory
 const root = path.join(__dirname, 'client')
@@ -11,8 +12,9 @@ const root = path.join(__dirname, 'client')
 const imagesPath = path.join(__dirname, '..', 'Sample Images')
 const emwinPath = path.join(__dirname, '..', 'EMWIN')
 
-//Default user location abbreviation
+//Default user location abbreviation, initialize emnwin index
 var userLocation = "CLE";
+var emwinIndex = 0;
 
 //innitialize express app
 const app = express();
@@ -22,9 +24,8 @@ app.listen(3000);
 
 app.use(express.static(root));
 
-//reroute requests to /images and /emwin to the correct local directory
+//reroute requests to /images and to the correct local directory
 app.use('/images', express.static(imagesPath));
-app.use('/emwin', express.static(emwinPath));
 
 
 //sends designated html doc for requests for the following web pages
@@ -47,6 +48,7 @@ app.get('/location', (req, res) => {
 /* any request to /filepath will have the params for the desired sector and image type in the url params, 
 when get request is made server sends back list of filenames contained within the specified directory */
 app.get('/filepath', (req, res) => {
+    //get parameters
     const queryParams = req.query;
     //console.log(queryParams['sector']);
     //console.log(queryParams['type']);
@@ -88,15 +90,18 @@ app.get('/send_loc', (req, res) => {
     res.setHeader('Content-Type', 'text/plain');
     const queryParams = req.query;
     userLocation = queryParams['location'];
+    emwinIndex = 0;
     res.send(userLocation);
 });
 
 //requests to emwin will return a list of all emwin text files pertaining to users current location
 app.get('/get_emwin', (req, res) => {
+    //get parameters
+    const queryParams = req.query;
     //set response type to plain text
     res.setHeader('Content-Type', 'text/plain');
     //initialize response string
-    var responseText = "";
+    var emwinList = [];
     //iterate through all files in directory
     fs.readdir("../EMWIN", (err, files) => {
         if (err) {
@@ -108,19 +113,46 @@ app.get('/get_emwin', (req, res) => {
         files.forEach(file => {
             if (file.toString() != '.gitignore') {
                 filename = file.toString();
+
                 substring = filename.split('_')[1].split(/(\d+)/)[2];
-                console.log(substring);
+                //console.log(substring);
                 if (substring.includes(userLocation)) {
-                    responseText += '/emwin/' + filename + ',';
+                    emwinList.push('../EMWIN/' + filename);
                 }
             }
         });
-        //remove last comma
-        if (responseText != "") {
-            responseText = responseText.slice(0, -1);
+        if (emwinList.length == 0) {
+            res.send("");
         }
-        res.send(responseText);
-        //console.log(newStr);
+        else {
+            //sort list of emwin files in reverse order by the substring containing the datetime
+            emwinList.sort((a,b) => {
+                const subA = a.split('_')[4];
+                const subB = b.split('_')[4];
+                return toInteger(subB) - toInteger(subA);
+            })
+            switch (queryParams['index']) {
+                case "next":
+                    emwinIndex++;
+                    if (emwinIndex >= emwinList.length) { //if emwin index exceeds length of file list array, reset to start
+                        emwinIndex = 0; //reset to beginning
+                    }
+                    break;
+                case "prev":
+                    emwinIndex--;
+                    if (emwinIndex < 0) { //if emwin index exceeds length of file list array, reset to end
+                        emwinIndex = emwinList.length - 1; //reset to end
+                    }
+                    break;
+            }
+            fs.readFile(emwinList[emwinIndex], 'utf8', (err, data) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                res.send(data);
+            });
+        }
     });
 });
 
