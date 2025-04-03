@@ -131,6 +131,23 @@ h1 {
     padding: 5px;
 }
 
+.popup {
+    display: none;
+    margin-left: 30%;
+    width: 600px;
+    background-color: #FFF7E9;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+.popup button {
+    margin-left: 150px;
+}
+
+.popupShow {
+    display: block;
+}
+
 .dropdownContainer {
     margin-bottom: 10px;
     width: 100%;

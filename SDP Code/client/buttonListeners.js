@@ -7,6 +7,7 @@ var type = "01";
 var timeStep = 1;
 var numImages = 12;
 var usr_location = "CLE";
+const audio = new Audio("/images/website_files/alert_tone.mp3")
 
 function animationLoop() {
   intervalID = setInterval(function () {
@@ -124,13 +125,37 @@ async function getEmwin(indexString) {
     }
     const respText = await response.text();
     //console.log(returnedList);
+    if (respText.toLowerCase().includes("tornado watch") ||
+    respText.toLowerCase().includes("tornado warning") ||
+    respText.toLowerCase().includes("severe thunderstorm watch") ||
+    respText.toLowerCase().includes("severe thunderstorm warning") ||
+    respText.toLowerCase().includes("flash flood watch") ||
+    respText.toLowerCase().includes("flash flood warning") ||
+    respText.toLowerCase().includes("blizzard warning") ||
+    respText.toLowerCase().includes("winter storm warning") ||
+    respText.toLowerCase().includes("high wind warning")) {
+      console.log("ALERT!")
+      var playPromise = audio.play();
+      // In browsers that don’t yet support this functionality,
+      // playPromise won’t be defined.
+      if (playPromise !== undefined) {
+        playPromise.then(function () {
+          // Automatic playback started!
+        }).catch(function (error) {
+          document.getElementsByClassName("popup")[0].classList.toggle("popupShow");
+        });
+      }
+    }
     return respText;
   } catch (error) {
     console.error(error.message);
   }
 }
 
-
+function playAlert(){
+  audio.play();
+  document.getElementsByClassName("popup")[0].classList.toggle("popupShow");
+}
 
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
@@ -494,4 +519,9 @@ window.onload = async function () {
   if (element != null && emwinText != "") {
     element.innerText = emwinText;
   }
+
+  //Refreshes page after 5 minutes, in case there is new data to display
+  setTimeout(function() {
+    window.location.href = window.location.href;
+  }, 300000);
 }
