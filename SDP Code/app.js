@@ -44,7 +44,8 @@ app.get('/location', (req, res) => {
     res.sendFile('./location.html', { root: root });
 });
 
-//any request to /filepath will have the params for the desired sector and image type in the url params, when get request is made server sends back list of filenames contained within the specified directory
+/* any request to /filepath will have the params for the desired sector and image type in the url params, 
+when get request is made server sends back list of filenames contained within the specified directory */
 app.get('/filepath', (req, res) => {
     const queryParams = req.query;
     //console.log(queryParams['sector']);
@@ -56,7 +57,7 @@ app.get('/filepath', (req, res) => {
     const directoryPath = path.join('../Sample Images', queryParams['sector'], queryParams['type']);
     //initialize response
     var responseText = "";
-   //reads files in directory
+    //reads files in directory
     fs.readdir(directoryPath, (err, files) => {
         if (err) {
             console.error('Error reading directory:', err);
@@ -74,13 +75,15 @@ app.get('/filepath', (req, res) => {
     });
 });
 
-//visiting /get_loc tells server to send the current user location abbreviation, this is useful as the client side javascript is restarted when new pages are loaded.
+//visiting /get_loc tells server to send the current user location abbreviation, this is useful as the client side javascript is 
+//restarted when new pages are loaded.
 app.get('/get_loc', (req, res) => {
     res.setHeader('Content-Type', 'text/plain');
     res.send(userLocation);
 });
 
-//visiting /send_loc tells server user has changed their location settings, with the new location within the url params. Server will save this as the users location
+//visiting /send_loc tells server user has changed their location settings, with the new location within the url params.
+//Server will save this as the users location
 app.get('/send_loc', (req, res) => {
     res.setHeader('Content-Type', 'text/plain');
     const queryParams = req.query;
@@ -100,7 +103,8 @@ app.get('/get_emwin', (req, res) => {
             console.error('Error reading directory:', err);
             return;
         }
-        //for each file gets string of name, then a substring containing the location abbreviation of the sending weather station. This will correspond to the users location. For each file containing correct substring appends to response text.
+        //for each file gets string of name, then a substring containing the location abbreviation of the sending weather station. 
+        //This will correspond to the users location. For each file containing correct substring appends to response text.
         files.forEach(file => {
             if (file.toString() != '.gitignore') {
                 filename = file.toString();
