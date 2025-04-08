@@ -1,4 +1,4 @@
-var gifImages = ['/images/latest.jpg'];
+var gifImages = ['/images/latest.jpg']; //array of all images for current sector and image type, index 0 is oldest image
 var aniIndex = 0;
 var emwinIndex = 0;
 var intervalID;
@@ -14,7 +14,9 @@ function animationLoop() {
     document.getElementById('image').src = gifImages[aniIndex]; //set image to next frame
     aniIndex = aniIndex + timeStep; //increase frame number
     if (aniIndex >= gifImages.length) { //if animation frame exceeds length of image array, reset to start
-      aniIndex = Math.max(gifImages.length - (numImages * timeStep), 0); //reset to beginning
+      //set first frame to index length of array minus total number of frames needed for animation loop, or 0. 
+      // Animation will then loop from middle of array to the end
+      aniIndex = Math.max(gifImages.length - (numImages * timeStep), 0);
     }
   }, 83.333) //miliseconds between each frame
 }
@@ -22,7 +24,10 @@ function animationLoop() {
 async function startAnimation() {
   gifImages = await getFiles("http://localhost:3000/filepath?sector=" + sector + "&type=" + type);
   //console.log(gifImages)
-  aniIndex = Math.max(gifImages.length - (numImages * timeStep), 0); //set to frame 0
+  
+  //set first frame to index length of array minus total number of frames needed for animation loop, or 0. 
+  // Animation will then loop from middle of array to the end
+  aniIndex = Math.max(gifImages.length - (numImages * timeStep), 0);
   clearInterval(intervalID) //stop any running animation loop processes
   animationLoop() //start animation
 }
@@ -522,6 +527,7 @@ window.onload = async function () {
 
   //Refreshes page after 5 minutes, in case there is new data to display
   setTimeout(function() {
+
     window.location.href = window.location.href;
   }, 300000);
 }

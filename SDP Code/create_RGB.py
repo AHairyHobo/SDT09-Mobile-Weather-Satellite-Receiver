@@ -14,6 +14,90 @@ def GeoColor(chan1, chan2, chan3, path, file): #arguments IR channels, path to w
     #img.show()  
     img.save(os.path.join(path, "GeoColor", file)) #save image at the given path with the given name
 
+#Combines channel 8, 10, and 13 to create SimpleWaterVapor Image
+def SimpleWaterVapor(chan8, chan10, chan13, path, file): #arguments IR channels, path to where images will be saved, and file name for new image
+
+    #print(chan13[13])
+
+    #for i in chan13:
+        #for j in i:
+            #print(i[j])
+            #if i[j] == 0:
+                #i[j] = 255
+    
+    truecolor = np.stack([0.7*(255-chan13), 0.8*(255-chan8), 255-chan10], axis=2) #stack 2d arrays to make 3d array
+
+    rgbImage = truecolor.astype(np.uint8) #Make sure values are 8 bit ints
+
+    #print(truecolor)
+    img = Image.fromarray(rgbImage, mode="RGB") #use pillow library to turn 3d array into image file
+    #img.show()
+    
+    # Convert to numpy array
+    img_np = np.array(img)
+
+    # Get image dimensions and compute center
+    height, width = img_np.shape[:2]
+    center_x, center_y = width // 2, height // 2
+
+    # Set radius (in pixels)
+    radius = min(center_x, center_y) * 1  # example: half of the smallest image dimension
+
+    # Create mask based on radius
+    Y, X = np.ogrid[:height, :width]
+    dist_from_center = np.sqrt((X - center_x)**2 + (Y - center_y)**2)
+    mask = dist_from_center <= radius
+
+    # Apply mask (set pixels outside radius to zero)
+    img_np[~mask] = 0
+
+    # Convert back to PIL image
+    img = Image.fromarray(img_np, mode="RGB")
+    
+    img.save(os.path.join(path, "SimpleWaterVapor", file)) #save image at the given path with the given name
+
+#Combines channel 2, 5, and 13 to create DayCloud Image
+def DayCloud(chan2, chan5, chan13, path, file): #arguments IR channels, path to where images will be saved, and file name for new image
+
+    #print(chan13[13])
+
+    #for i in chan13:
+        #for j in i:
+            #print(i[j])
+            #if i[j] == 0:
+                #i[j] = 255
+    
+    truecolor = np.stack([255-chan13, chan2, 0.4*chan5], axis=2) #stack 2d arrays to make 3d array
+
+    rgbImage = truecolor.astype(np.uint8) #Make sure values are 8 bit ints
+
+    #print(truecolor)
+    img = Image.fromarray(rgbImage, mode="RGB") #use pillow library to turn 3d array into image file
+    #img.show()
+    
+    # Convert to numpy array
+    img_np = np.array(img)
+
+    # Get image dimensions and compute center
+    height, width = img_np.shape[:2]
+    center_x, center_y = width // 2, height // 2
+
+    # Set radius (in pixels)
+    radius = min(center_x, center_y) * 1  # example: half of the smallest image dimension
+
+    # Create mask based on radius
+    Y, X = np.ogrid[:height, :width]
+    dist_from_center = np.sqrt((X - center_x)**2 + (Y - center_y)**2)
+    mask = dist_from_center <= radius
+
+    # Apply mask (set pixels outside radius to zero)
+    img_np[~mask] = 0
+
+    # Convert back to PIL image
+    img = Image.fromarray(img_np, mode="RGB")
+    img.save(os.path.join(path, "DayCloud", file)) #save image at the given path with the given name
+
+
 def loadFiles(path):
     channel1_files = os.listdir(os.path.join(path, "01")) #returns array containing strings of every file within directory
     channel1_files.remove("latest.jpg") #remove the latest image as it is a copy

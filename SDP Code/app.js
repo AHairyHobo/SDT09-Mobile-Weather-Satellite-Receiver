@@ -81,6 +81,7 @@ app.get('/filepath', (req, res) => {
 //restarted when new pages are loaded.
 app.get('/get_loc', (req, res) => {
     res.setHeader('Content-Type', 'text/plain');
+    emwinIndex = 0; //reset emwin index, ensures on page refresh most current emwin text is displayed
     res.send(userLocation);
 });
 
