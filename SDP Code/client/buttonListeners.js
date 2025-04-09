@@ -1,4 +1,4 @@
-var gifImages = ['/images/latest.jpg']; //array of all images for current sector and image type, index 0 is oldest image
+var gifImages = []; //array of all images for current sector and image type, index 0 is oldest image
 var aniIndex = 0;
 var emwinIndex = 0;
 var intervalID;
@@ -12,6 +12,7 @@ const audio = new Audio("/images/website_files/alert_tone.mp3")
 function animationLoop() {
   intervalID = setInterval(function () {
     document.getElementById('image').src = gifImages[aniIndex]; //set image to next frame
+    document.getElementById("image_date").innerText = extractDate(gifImages[aniIndex]);
     aniIndex = aniIndex + timeStep; //increase frame number
     if (aniIndex >= gifImages.length) { //if animation frame exceeds length of image array, reset to start
       //set first frame to index length of array minus total number of frames needed for animation loop, or 0. 
@@ -24,7 +25,7 @@ function animationLoop() {
 async function startAnimation() {
   gifImages = await getFiles("http://localhost:3000/filepath?sector=" + sector + "&type=" + type);
   //console.log(gifImages)
-  
+
   //set first frame to index length of array minus total number of frames needed for animation loop, or 0. 
   // Animation will then loop from middle of array to the end
   aniIndex = Math.max(gifImages.length - (numImages * timeStep), 0);
@@ -64,6 +65,8 @@ function imagePath() {
   if (typeText == "IR Band 15") typeString = "15/";
   if (typeText == "IR Band 16") typeString = "16/";
   if (typeText == "GeoColor") typeString = "GeoColor/";
+  if (typeText == "Day Cloud") typeString = "DayCloud/";
+  if (typeText == "Simple Water Vapor") typeString = "SimpleWaterVapor/";
   if (sectorText == "Continental U.S.") sectorString = "Conus/";
   if (sectorText == "Full Disk") sectorString = "Full Disk/";
   if (sectorText == "Meso M1") sectorString = "Meso/M1/";
@@ -131,14 +134,14 @@ async function getEmwin(indexString) {
     const respText = await response.text();
     //console.log(returnedList);
     if (respText.toLowerCase().includes("tornado watch") ||
-    respText.toLowerCase().includes("tornado warning") ||
-    respText.toLowerCase().includes("severe thunderstorm watch") ||
-    respText.toLowerCase().includes("severe thunderstorm warning") ||
-    respText.toLowerCase().includes("flash flood watch") ||
-    respText.toLowerCase().includes("flash flood warning") ||
-    respText.toLowerCase().includes("blizzard warning") ||
-    respText.toLowerCase().includes("winter storm warning") ||
-    respText.toLowerCase().includes("high wind warning")) {
+      respText.toLowerCase().includes("tornado warning") ||
+      respText.toLowerCase().includes("severe thunderstorm watch") ||
+      respText.toLowerCase().includes("severe thunderstorm warning") ||
+      respText.toLowerCase().includes("flash flood watch") ||
+      respText.toLowerCase().includes("flash flood warning") ||
+      respText.toLowerCase().includes("blizzard warning") ||
+      respText.toLowerCase().includes("winter storm warning") ||
+      respText.toLowerCase().includes("high wind warning")) {
       console.log("ALERT!")
       var playPromise = audio.play();
       // In browsers that don’t yet support this functionality,
@@ -157,9 +160,69 @@ async function getEmwin(indexString) {
   }
 }
 
-function playAlert(){
+function playAlert() {
   audio.play();
   document.getElementsByClassName("popup")[0].classList.toggle("popupShow");
+}
+
+function extractDate(filename) {
+  const juliandate = filename.split('_')[3].slice(1);
+  const year = juliandate.slice(0,4); 
+  var day = juliandate.slice(4,7);
+  const hour = juliandate.slice(7,9);
+  const minute = juliandate.slice(9,11);
+  const second = juliandate.slice(11,13);
+
+  if (day > 334) {
+    month = "December";
+    day = day - 334;
+  }
+  else if (day > 304) {
+    month = "November";
+    day = day - 304;
+  }
+  else if (day > 273) {
+    month = "October";
+    day = day - 273;
+  }
+  else if (day > 243) {
+    month = "September";
+    day = day - 243;
+  }
+  else if (day > 212) {
+    month = "August";
+    day = day - 212;
+  }
+  else if (day > 181) {
+    month = "July";
+    day = day - 181;
+  }
+  else if (day > 151) {
+    month = "June";
+    day = day - 151;
+  }
+  else if (day > 120) {
+    month = "May";
+    day = day - 120;
+  }
+  else if (day > 90) {
+    month = "April";
+    day = day - 90;
+  }
+  else if (day > 59) {
+    month = "March";
+    day = day - 59;
+  }
+  else if (day > 31) {
+    month = "February";
+    day = day - 31;
+  }
+  else {
+    month = "January";
+  }
+
+
+  return month + " " + day + " " + year + "   " + hour + ":" + minute + ":" + second;
 }
 
 /* When the user clicks on the button,
@@ -196,7 +259,7 @@ function westernRegionDropdownClick() {
 }
 
 /*Options for sector selection*/
-function sectorFunc(buttonNum) {
+async function sectorFunc(buttonNum) {
   var dropButt = document.getElementById("sectorButton");
   var text;
   clearInterval(intervalID);
@@ -281,11 +344,13 @@ function sectorFunc(buttonNum) {
   if (dropButt.innerText != text) {
     dropButt.innerText = text;
     document.getElementById(id = "image").src = imagePath();
+    gifImages = await getFiles("http://localhost:3000/filepath?sector=" + sector + "&type=" + type);
+    document.getElementById("image_date").innerText = extractDate(gifImages[gifImages.length - 1]);
   }
 }
 
 /*Options for image type selection*/
-function typeFunc(buttonNum) {
+async function typeFunc(buttonNum) {
   var dropButt = document.getElementById("imageTypeButton");
   var text;
   clearInterval(intervalID)
@@ -361,9 +426,11 @@ function typeFunc(buttonNum) {
       break;
     case 18:
       text = document.getElementById(id = "type18Button").innerText;
+      type = "DayCloud";
       break;
     case 19:
       text = document.getElementById(id = "type19Button").innerText;
+      type = "SimpleWaterVapor";
       break;
     case 20:
       text = document.getElementById(id = "type20Button").innerText;
@@ -384,6 +451,8 @@ function typeFunc(buttonNum) {
   if (dropButt.innerText != text) {
     dropButt.innerText = text;
     document.getElementById(id = "image").src = imagePath();
+    gifImages = await getFiles("http://localhost:3000/filepath?sector=" + sector + "&type=" + type);
+    document.getElementById("image_date").innerText = extractDate(gifImages[gifImages.length - 1]);
   }
 }
 
@@ -525,8 +594,12 @@ window.onload = async function () {
     element.innerText = emwinText;
   }
 
+  //get list of images for current sector and type and set to most recent image
+  gifImages = await getFiles("http://localhost:3000/filepath?sector=" + sector + "&type=" + type);
+  document.getElementById("image_date").innerText = extractDate(gifImages[gifImages.length - 1]); //display date time for most recent image
+
   //Refreshes page after 5 minutes, in case there is new data to display
-  setTimeout(function() {
+  setTimeout(function () {
 
     window.location.href = window.location.href;
   }, 300000);

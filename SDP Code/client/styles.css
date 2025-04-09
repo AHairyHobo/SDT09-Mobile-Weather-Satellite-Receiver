@@ -68,6 +68,13 @@ h1 {
     width: 100%
 }
 
+#image_date {
+    background-color: #FFF7E9;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%
+}
+
 #pageList {
     width: 100%;
     background-image: url('/images/website_files/full_disk_image.jpg');

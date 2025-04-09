@@ -13,8 +13,6 @@ def rebin(a):
         shape = (1000, 1000)
     elif (a.shape[0] % 500 == 0) and (a.shape[1] % 500 == 0):
         shape = (500, 500)
-    elif (a.shape[0] % 500 == 0) and (a.shape[1] % 500 == 0):
-        shape = (500, 500)
     else:
         print("Unhandled image dimensions")
         print(a.shape[0])
