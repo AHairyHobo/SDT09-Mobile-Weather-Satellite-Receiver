@@ -25,6 +25,14 @@ h1 {
     margin-bottom: 10px;
 }
 
+.sideButtonsContainer {
+    display: flex;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+}
+
 #livedataPageLocation {
     margin-left: 20px;
 }
@@ -88,7 +96,7 @@ h1 {
 }
 
 #pageList a,
-#sidebar a {
+#sidebar a{
     display: block;
     text-decoration: none;
     color: #ffffff;
@@ -103,7 +111,8 @@ h1 {
 .dropbtn:hover,
 .dropbtn:focus, 
 .anibtn:hover,
-.emwinbtn:hover {
+.emwinbtn:hover, 
+.sideButtons:hover{
     text-decoration: underline;
     background-color: #004C9D;
 }
@@ -118,7 +127,8 @@ h1 {
 
 /* Dropdown Button */
 .dropbtn,
-.anibtn {
+.anibtn,
+.sideButtons{
     color: #ffffff;
     background-color: #041E42;
     padding: 5px;

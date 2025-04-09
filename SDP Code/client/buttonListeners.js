@@ -280,66 +280,6 @@ async function sectorFunc(buttonNum) {
       text = document.getElementById(id = "sector4Button").innerText;
       sector = "Meso/M2";
       break;
-    case 5:
-      text = document.getElementById(id = "sector5Button").innerText;
-      break;
-    case 6:
-      text = document.getElementById(id = "sector6Button").innerText;
-      break;
-    case 7:
-      text = document.getElementById(id = "sector7Button").innerText;
-      break;
-    case 8:
-      text = document.getElementById(id = "sector8Button").innerText;
-      break;
-    case 9:
-      text = document.getElementById(id = "sector9Button").innerText;
-      break;
-    case 10:
-      text = document.getElementById(id = "sector10Button").innerText;
-      break;
-    case 11:
-      text = document.getElementById(id = "sector11Button").innerText;
-      break;
-    case 12:
-      text = document.getElementById(id = "sector12Button").innerText;
-      break;
-    case 13:
-      text = document.getElementById(id = "sector13Button").innerText;
-      break;
-    case 14:
-      text = document.getElementById(id = "sector14Button").innerText;
-      break;
-    case 15:
-      text = document.getElementById(id = "sector15Button").innerText;
-      break;
-    case 16:
-      text = document.getElementById(id = "sector16Button").innerText;
-      break;
-    case 17:
-      text = document.getElementById(id = "sector17Button").innerText;
-      break;
-    case 18:
-      text = document.getElementById(id = "sector18Button").innerText;
-      break;
-    case 19:
-      text = document.getElementById(id = "sector19Button").innerText;
-      break;
-    case 20:
-      text = document.getElementById(id = "sector20Button").innerText;
-      break;
-    case 21:
-      text = document.getElementById(id = "sector21Button").innerText;
-      break;
-    case 22:
-      text = document.getElementById(id = "sector22Button").innerText;
-      break;
-    case 23:
-      text = document.getElementById(id = "sector23Button").innerText;
-      break;
-    case 24:
-      text = document.getElementById(id = "sector24Button").innerText;
-      break;
   }
   if (dropButt.innerText != text) {
     dropButt.innerText = text;
@@ -431,21 +371,6 @@ async function typeFunc(buttonNum) {
     case 19:
       text = document.getElementById(id = "type19Button").innerText;
       type = "SimpleWaterVapor";
-      break;
-    case 20:
-      text = document.getElementById(id = "type20Button").innerText;
-      break;
-    case 21:
-      text = document.getElementById(id = "type21Button").innerText;
-      break;
-    case 22:
-      text = document.getElementById(id = "type22Button").innerText;
-      break;
-    case 23:
-      text = document.getElementById(id = "type23Button").innerText;
-      break;
-    case 24:
-      text = document.getElementById(id = "type24Button").innerText;
       break;
   }
   if (dropButt.innerText != text) {
@@ -564,6 +489,25 @@ async function nextEmwin() {
   }
 }
 
+function prevImage(amount) {
+  aniIndex -= amount;
+  if (aniIndex < 0) {
+    aniIndex = gifImages.length + aniIndex;
+    document.getElementById("image")
+  }
+  document.getElementById(id = "image").src = gifImages[aniIndex];
+  document.getElementById("image_date").innerText = extractDate(gifImages[aniIndex]);
+}
+
+function nextImage(amount) {
+  aniIndex += amount;
+  if (aniIndex >= gifImages.length) {
+    aniIndex = aniIndex - gifImages.length;
+  }
+  document.getElementById(id = "image").src = gifImages[aniIndex];
+  document.getElementById("image_date").innerText = extractDate(gifImages[aniIndex]);
+}
+
 // Close the dropdown menu if the user clicks outside of it
 window.onclick = function (event) {
   if (!event.target.matches('.dropbtn')) {
@@ -597,6 +541,7 @@ window.onload = async function () {
   //get list of images for current sector and type and set to most recent image
   gifImages = await getFiles("http://localhost:3000/filepath?sector=" + sector + "&type=" + type);
   document.getElementById("image_date").innerText = extractDate(gifImages[gifImages.length - 1]); //display date time for most recent image
+  aniIndex = gifImages.length - 1;
 
   //Refreshes page after 5 minutes, in case there is new data to display
   setTimeout(function () {

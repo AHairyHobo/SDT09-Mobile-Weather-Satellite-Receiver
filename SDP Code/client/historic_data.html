@@ -2,14 +2,14 @@
 <html>
 
 <head>
-    <title>Live Data</title>
+    <title>Historic Data</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="#">
 </head>
 
 <body>
     <div id="header">
-        <h1>Live Data Viewer</h1>
+        <h1>Historic Data Viewer</h1>
     </div>
     <div class = "popup">
         <h1>ALERT! Click Button to Allow Sound!</h1>
@@ -35,28 +35,6 @@
                         <button onclick="sectorFunc(2)" id="sector2Button">Full Disk</button>
                         <button onclick="sectorFunc(3)" id="sector3Button">Meso M1</button>
                         <button onclick="sectorFunc(4)" id="sector4Button">Meso M2</button>
-                        <!--
-                        <button onclick="sectorFunc(5)" id="sector5Button">Northern Rockies</button>
-                        <button onclick="sectorFunc(6)" id="sector6Button">Upper Mississippi Valley</button>
-                        <button onclick="sectorFunc(7)" id="sector7Button">Great Lakes</button>
-                        <button onclick="sectorFunc(8)" id="sector8Button">Northeast</button>
-                        <button onclick="sectorFunc(9)" id="sector9Button">Southern Rockies</button>
-                        <button onclick="sectorFunc(10)" id="sector10Button">Southern Plains</button>
-                        <button onclick="sectorFunc(11)" id="sector11Button">Southern Mississippi Valley</button>
-                        <button onclick="sectorFunc(12)" id="sector12Button">Southeast</button>
-                        <button onclick="sectorFunc(13)" id="sector13Button">U.S. East Coast</button>
-                        <button onclick="sectorFunc(14)" id="sector14Button">Canada</button>
-                        <button onclick="sectorFunc(15)" id="sector15Button">Northern Atlantic Ocean</button>
-                        <button onclick="sectorFunc(16)" id="sector16Button">Caribbean</button>
-                        <button onclick="sectorFunc(17)" id="sector17Button">Gulf of Mexico</button>
-                        <button onclick="sectorFunc(18)" id="sector18Button">Puerto Rico</button>
-                        <button onclick="sectorFunc(19)" id="sector19Button">Tropical Atlantic Ocean</button>
-                        <button onclick="sectorFunc(20)" id="sector20Button">Eastern Pacific Ocean</button>
-                        <button onclick="sectorFunc(21)" id="sector21Button">Mexico</button>
-                        <button onclick="sectorFunc(22)" id="sector22Button">Central America</button>
-                        <button onclick="sectorFunc(23)" id="sector23Button">South America (North)</button>
-                        <button onclick="sectorFunc(24)" id="sector24Button">South America (South)</button>
-                        -->
                     </div>
                 </div>
             </div>
@@ -82,50 +60,23 @@
                         <button onclick="typeFunc(15)" id="type15Button">IR Band 15</button>
                         <button onclick="typeFunc(16)" id="type16Button">IR Band 16</button>
                         <button onclick="typeFunc(17)" id="type17Button">GeoColor</button>
-                        <button onclick="typeFunc(18)" id="type18Button">GLM FED3+GeoColor</button>
-                        <button onclick="typeFunc(19)" id="type19Button">AirMass RGB</button>
-                        <button onclick="typeFunc(20)" id="type20Button">Sandwich RGB</button>
-                        <button onclick="typeFunc(21)" id="type21Button">Derived Motion Winds</button>
-                        <button onclick="typeFunc(22)" id="type22Button">Day Night Cloud Micro Combo RGB</button>
-                        <button onclick="typeFunc(23)" id="type23Button">Fire Temperature RGB</button>
-                        <button onclick="typeFunc(24)" id="type24Button">Dust RGB</button>
+                        <button onclick="typeFunc(18)" id="type18Button">Day Cloud</button>
+                        
 
                     </div>
                 </div>
             </div>
-            <div class="dropdownContainer">
-                # of Images <br>
-                <div class="dropdown">
-                    <button onclick="numImagesDropdownClick()" class="dropbtn" id="numImagesButton">12</button>
-                    <div id="numImagesDropdown" class="dropdown-content">
-                        <button onclick="num(1)" id="num1Button">12</button>
-                        <button onclick="num(2)" id="num2Button">24</button>
-                        <button onclick="num(3)" id="num3Button">36</button>
-                        <button onclick="num(4)" id="num4Button">48</button>
-                        <button onclick="num(5)" id="num5Button">60</button>
-                        <button onclick="num(6)" id="num6Button">72</button>
-                        <button onclick="num(7)" id="num7Button">84</button>
-                        <button onclick="num(8)" id="num8Button">96</button>
-                        <button onclick="num(9)" id="num9Button">120</button>
-                        <button onclick="num(10)" id="num10Button">150</button>
-                        <button onclick="num(11)" id="num11Button">180</button>
-                        <button onclick="num(12)" id="num12Button">240</button>
-                    </div>
-                </div>
+            <div class = "sideButtonsContainer">
+                <button onclick="prevImage(1)" class="sideButtons" id="prev1">Prev</button>
+                <button onclick="nextImage(1)" class="sideButtons" id="next1">Next</button>
             </div>
-            <div class="dropdownContainer">
-                Time Step <br>
-                <div class="dropdown">
-                    <button onclick="timeStepDropdownClick()" class="dropbtn" id="timeStepButton">10 minutes</button>
-                    <div id="timeStepDropdown" class="dropdown-content">
-                        <button onclick="step(1)" id="step1Button">10 minutes</button>
-                        <button onclick="step(2)" id="step2Button">20 minutes</button>
-                        <button onclick="step(3)" id="step3Button">30 minutes</button>
-                        <button onclick="step(4)" id="step4Button">40 minutes</button>
-                        <button onclick="step(5)" id="step5Button">50 minutes</button>
-                        <button onclick="step(6)" id="step6Button">60 minutes</button>
-                    </div>
-                </div>
+            <div class = "sideButtonsContainer">
+                <button onclick="prevImage(10)" class="sideButtons" id="prev10">Prev+</button>
+                <button onclick="nextImage(10)" class="sideButtons" id="next10">Next+</button>
+            </div>
+            <div class = "sideButtonsContainer">
+                <button onclick="prevImage(50)" class="sideButtons" id="prev50">Prev++</button>
+                <button onclick="nextImage(50)" class="sideButtons" id="next50">Next++</button>
             </div>
         </div>
     </div>
