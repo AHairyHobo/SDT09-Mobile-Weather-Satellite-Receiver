@@ -1,14 +1,18 @@
-var gifImages = []; //array of all images for current sector and image type, index 0 is oldest image
-var aniIndex = 0;
-var emwinIndex = 0;
-var intervalID;
-var sector = "Full%20Disk";
-var type = "01";
-var timeStep = 1;
-var numImages = 12;
-var usr_location = "CLE";
-const audio = new Audio("/images/website_files/alert_tone.mp3")
+//Clientside javascript to facilitate buttons and other interactive elements and processing of website
 
+var gifImages = []; //array of all images for current sector and image type, index 0 is oldest image
+var aniIndex = 0; //Index to keep track of current satellite image in animation and historic view
+var intervalID; //ID for interval function used in animation, id used for starting and stopping
+var sector = "Full%20Disk"; //Keeps track of current sector (full disk, conus, or meso) based on selection options from userused in constructing get requests
+var type = "01"; //Keeps track of current image type (ir channels or rgp type), used in constructing get request
+var timeStep = 1; //used in animation to determine how many images to advance by each animnation loop
+var numImages = 12; //How many images to display in loop for animation, set by user default is 12
+var usr_location = "CLE"; //Users location, default Cleveland
+const audio = new Audio("/images/website_files/alert_tone.mp3") //Audio object used to play weather alert tone
+
+//Animation loop, when called sets the currently displayed image to the next in sequence based on aniIndex, sets text below image to display
+//the date and time of the image, increases aniIndex based on time step set by user. If aniIndex is outside the bounds of the image array is
+// set back to beginning of the loop
 function animationLoop() {
   intervalID = setInterval(function () {
     document.getElementById('image').src = gifImages[aniIndex]; //set image to next frame
@@ -22,6 +26,8 @@ function animationLoop() {
   }, 83.333) //miliseconds between each frame
 }
 
+//Called when user clicks button to start animation, first gets updated list of all images of the specified sector and type from server,
+//sets aniIndex to beginning of loop, stops any running animations then begins new animation
 async function startAnimation() {
   gifImages = await getFiles("http://localhost:3000/filepath?sector=" + sector + "&type=" + type);
   //console.log(gifImages)
@@ -42,7 +48,7 @@ function resumeAnimation() {
   animationLoop() //start animation loop
 }
 
-/*Get path to correct latest image*/
+//Get path to correct latest image based on current sector and type settings, returns a string of the path
 function imagePath() {
   var sectorString = "";
   var typeString = "";
@@ -75,9 +81,12 @@ function imagePath() {
     sectorString = "";
     typeString = "";
   }
-  return "/images/" + sectorString + typeString + "latest.jpg";
+  return "/images/" + sectorString + typeString + "latest.jpg"; //returns constructed string of the file path for current settings
 }
 
+//Function to help facilitate get requests to server for files in a directory. Takes in string of the url to be requested as an argument, does GET request and awaits
+//response, splits response string of file paths based on comma separator, removes any element containing "latest.jpg", sorts list by date
+//then returns the list of files
 async function getFiles(url) {
   try {
     const response = await fetch(url);
@@ -96,6 +105,7 @@ async function getFiles(url) {
   }
 }
 
+//Function to facilitate get requests for the users location
 async function getLocation() {
   try {
     const response = await fetch("http://localhost:3000/get_loc");
@@ -110,6 +120,7 @@ async function getLocation() {
   }
 }
 
+//Function to update the server with new location for the user
 async function sendLocation(location) {
   try {
     const response = await fetch("http://localhost:3000/send_loc?location=" + location);
@@ -125,6 +136,9 @@ async function sendLocation(location) {
   }
 }
 
+//function to get facilitate get requests for emwin text files, argument is string "next" "prev" "curr" to tell server which emwin to get based 
+//on current index. Once file is returned by server text is parsed for any keyword indicating a weather event that needs the users attention.
+//If found audio alert is played
 async function getEmwin(indexString) {
   try {
     const response = await fetch("http://localhost:3000/get_emwin?index=" + indexString);
@@ -149,7 +163,8 @@ async function getEmwin(indexString) {
       if (playPromise !== undefined) {
         playPromise.then(function () {
           // Automatic playback started!
-        }).catch(function (error) {
+        }).catch(function (error) { //If there is an error in automatic playback its becuase browser won't allow audio to play before user has
+        // interacted with the site. In this cape an html element is shown to alert user
           document.getElementsByClassName("popup")[0].classList.toggle("popupShow");
         });
       }
@@ -160,12 +175,16 @@ async function getEmwin(indexString) {
   }
 }
 
+//This function is called to play the alert sound when only when browser could not do it automatically, called from button press on popup
 function playAlert() {
   audio.play();
   document.getElementsByClassName("popup")[0].classList.toggle("popupShow");
 }
 
+//Function to convert the date time time format present in the file names of satellite image to the correct calendar date. File names use
+//julian date instead of gregorian calendar
 function extractDate(filename) {
+  //extracting each part of the string containing the different time and date elements
   const juliandate = filename.split('_')[3].slice(1);
   const year = juliandate.slice(0,4); 
   var day = juliandate.slice(4,7);
@@ -173,6 +192,7 @@ function extractDate(filename) {
   const minute = juliandate.slice(9,11);
   const second = juliandate.slice(11,13);
 
+  //determining month based on julian day
   if (day > 334) {
     month = "December";
     day = day - 334;
@@ -221,7 +241,7 @@ function extractDate(filename) {
     month = "January";
   }
 
-
+  //constructing final time and date string with formatting
   return month + " " + day + " " + year + "   " + hour + ":" + minute + ":" + second;
 }
 
@@ -263,6 +283,7 @@ async function sectorFunc(buttonNum) {
   var dropButt = document.getElementById("sectorButton");
   var text;
   clearInterval(intervalID);
+  //Changing text and sector variable based on users selection
   switch (buttonNum) {
     case 1:
       text = document.getElementById(id = "sector1Button").innerText;
@@ -281,6 +302,8 @@ async function sectorFunc(buttonNum) {
       sector = "Meso/M2";
       break;
   }
+  //If the sector has changed, set the text of the button to new sector, change displayed image to new sector, 
+  //update array of images for animation and update date below image
   if (dropButt.innerText != text) {
     dropButt.innerText = text;
     document.getElementById(id = "image").src = imagePath();
@@ -295,6 +318,7 @@ async function typeFunc(buttonNum) {
   var text;
   clearInterval(intervalID)
   console.log(buttonNum);
+  //changing text and type variables based on user selection
   switch (buttonNum) {
     case 1:
       text = document.getElementById(id = "type1Button").innerText;
@@ -373,6 +397,8 @@ async function typeFunc(buttonNum) {
       type = "SimpleWaterVapor";
       break;
   }
+  //If the type has changed, set the text of the button to new type, change displayed image to new type, 
+  //update array of images for animation and update date below image
   if (dropButt.innerText != text) {
     dropButt.innerText = text;
     document.getElementById(id = "image").src = imagePath();
@@ -473,6 +499,7 @@ async function regionName(reg) {
   await sendLocation(reg)
 }
 
+//function does get request for previous emwin text file
 async function prevEmwin() {
   const emwinText = await getEmwin("prev");
   const element = document.getElementById("emwin_content")
@@ -481,6 +508,7 @@ async function prevEmwin() {
   }
 }
 
+//function does get request for the next emwin text file
 async function nextEmwin() {
   const emwinText = await getEmwin("next");
   const element = document.getElementById("emwin_content")
@@ -489,6 +517,7 @@ async function nextEmwin() {
   }
 }
 
+//function to change displayed image to older image by a given amount for historical data viewer
 function prevImage(amount) {
   aniIndex -= amount;
   if (aniIndex < 0) {
@@ -499,6 +528,7 @@ function prevImage(amount) {
   document.getElementById("image_date").innerText = extractDate(gifImages[aniIndex]);
 }
 
+//function to change displayed image to newer image by a given amount for historical data viewer
 function nextImage(amount) {
   aniIndex += amount;
   if (aniIndex >= gifImages.length) {
@@ -545,7 +575,6 @@ window.onload = async function () {
 
   //Refreshes page after 5 minutes, in case there is new data to display
   setTimeout(function () {
-
     window.location.href = window.location.href;
   }, 300000);
 }
